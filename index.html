@@ -61,6 +61,25 @@
     padding-top: 5px;
   }
 
+  .top-right ul{
+    padding-left:20px;   /* 控制整体缩进 */
+    margin-left:0;
+}
+
+.top-right > ul{
+    padding-left:0;   /* 第一层更贴左 */
+}
+
+.top-section .row{
+    margin-left:-5px;
+    margin-right:-5px;
+}
+
+.top-section [class*="col-"]{
+    padding-left:10px;
+    padding-right:10px;
+}
+
   /* 左侧头像与文字的间距更规整 */
   .profile-img{
       width: 160px;      /* 想多小就改这里 */
@@ -123,12 +142,12 @@
   <div class="row top-section">
 
     <!-- 左栏：基本信息 + 照片 -->
-    <div class="col-md-4 col-sm-5 col-xs-12 top-left">
+    <div class="col-md-3 col-sm-4 col-xs-12 top-left">
       <img class="img-responsive profile-img" src="images/avatar.jpg" alt="Avatar of Jiawei Liu">
     </div>
 
     <!-- 右栏：Research Interest -->
-    <div class="col-md-8 col-sm-7 col-xs-12 top-right">
+    <div class="col-md-9 col-sm-8 col-xs-12 top-right">
       <div class="heading">Jiawei Liu (刘佳玮)</div>
       <div class="info-text" style="margin-top:10px">
         Ph.D., Postdoctoral Fellow<br>
