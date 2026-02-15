@@ -30,7 +30,7 @@
 <body>
 
 <style>
-  .heading {
+.heading {
     word-wrap: break-word;
     font-family: 'Oswald', sans-serif;
     font-size: 32px;
@@ -48,6 +48,39 @@
 
   .link-list a {
     margin-right: 5px;
+  }
+
+  /* ====== 新增：只做布局与间距，不改颜色/风格 ====== */
+  .top-section {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  /* 让上半部分左右两栏更舒服一些 */
+  .top-left, .top-right {
+    padding-top: 5px;
+  }
+
+  /* 左侧头像与文字的间距更规整 */
+  .profile-img {
+    margin-top: 6px;
+    max-width: 220px;   /* 不改变图片本身，只限制过大时的显示 */
+  }
+
+  /* 右侧 Research Interest 区域与标题的间距 */
+  .top-right h3 {
+    margin-top: 0;
+  }
+
+  /* 下面所有内容统一单栏：清除浮动并给一点呼吸感 */
+  .single-col {
+    clear: both;
+    padding-top: 10px;
+  }
+
+  /* 让 col（你原本用的 class="col"）在 Bootstrap 3 下表现一致 */
+  .col {
+    width: 100%;
   }
 </style>
 
@@ -83,92 +116,91 @@
 
 <!--It is possible to have multiple pages  https://souravchatterjee.su.domains//index.html -->
   <!-- Page Content -->
-    <div class="container">
-        <div class="row">
-            <!-- Contact Info on the Sidebar -->
-            <div class="col-md-3 col-xs-12">
-              <div class="heading">Jiawei Liu (刘佳玮)</div>
-              <div class="row">
-                <div class="col-md-10 col-xs-4">
-                  <img class="img-responsive" src="images/avatar.jpg" alt="Avatar of Jiawei Liu">
-                </div>
-              </div>
-              <div class="info-text" style="margin-top:3%">
-                <!-- <i>Phd Student</i><br>
-                GAMMA Lab<br>
-                <p class="university-color">Beijing University of Posts and Telecommunications</li>
-                Beijing, China<br>
-                 -->
-                Ph.D., Postdoctoral Fellow<br>
-                <a href="https://www.cse.cuhk.edu.hk/">Department of Computer Science and Engineering</a><br>
-                <a href="https://www.cuhk.edu.hk/english/index.html">Chinese University of Hong Kong (CUHK)</a><br>
-                Supervised by Prof. <a href="https://www.cse.cuhk.edu.hk/~byu/">Bei Yu</a><br>
-                Email: <a href="mailto:liujw@cse.cuhk.edu.hk">liujw@cse.cuhk.edu.hk</a><br>
-              </div>
-              <div class="link-list">
-                <a href="https://scholar.google.com/citations?user=ufius3MAAAAJ">Google Scholar</a> |
-                <a href="https://github.com/J-cabin">GitHub</a>
-                <!-- <a href="https://www.zhihu.com/people/fu-shang-76-34">Zhihu</a> -->
-              </div>
-            </div>
-            <!-- Entries Column -->
-            <div class="col">
-  <h3>Research Interest</h3>
-  <ul class="vert">
-    <li>
-      <strong>Electronic Automation Design (EDA):</strong>
+   <div class="container">
+
+  <!-- ===== 顶部：两栏（左基本信息+照片；右Research Interest）===== -->
+  <div class="row top-section">
+
+    <!-- 左栏：基本信息 + 照片 -->
+    <div class="col-md-4 col-sm-5 col-xs-12 top-left">
+      <div class="heading">Jiawei Liu (刘佳玮)</div>
+
+      <img class="img-responsive profile-img" src="images/avatar.jpg" alt="Avatar of Jiawei Liu">
+
+      <div class="info-text" style="margin-top:10px">
+        Ph.D., Postdoctoral Fellow<br>
+        <a href="https://www.cse.cuhk.edu.hk/">Department of Computer Science and Engineering</a><br>
+        <a href="https://www.cuhk.edu.hk/english/index.html">Chinese University of Hong Kong (CUHK)</a><br>
+        Supervised by Prof. <a href="https://www.cse.cuhk.edu.hk/~byu/">Bei Yu</a><br>
+        Email: <a href="mailto:liujw@cse.cuhk.edu.hk">liujw@cse.cuhk.edu.hk</a><br>
+      </div>
+
+      <div class="link-list">
+        <a href="https://scholar.google.com/citations?user=ufius3MAAAAJ">Google Scholar</a> |
+        <a href="https://github.com/J-cabin">GitHub</a>
+      </div>
+    </div>
+
+    <!-- 右栏：Research Interest -->
+    <div class="col-md-8 col-sm-7 col-xs-12 top-right">
+      <h3>Research Interest</h3>
       <ul class="vert">
-        <li>EDA for Digital IC Design:
+        <li>
+          <strong>Electronic Automation Design (EDA):</strong>
           <ul class="vert">
-            <li><strong>Circuit Representation Learning:</strong> PolarGate (ICCAD'24), WideGate (DATE'25), TopoRTL (ICLR'26)</li>
-            <li><strong>Logic Synthesis:</strong> MILS (GLSVLSI'25)</li>
-            <li><strong>Power Integrity Analysis:</strong> PGAU (GLSVLSI'24), IR-Fusion (DATE'25), IRGNN (DAC'25)</li>
+            <li>EDA for Digital IC Design:
+              <ul class="vert">
+                <li><strong>Circuit Representation Learning:</strong> PolarGate (ICCAD'24), WideGate (DATE'25), TopoRTL (ICLR'26)</li>
+                <li><strong>Logic Synthesis:</strong> MILS (GLSVLSI'25)</li>
+                <li><strong>Power Integrity Analysis:</strong> PGAU (GLSVLSI'24), IR-Fusion (DATE'25), IRGNN (DAC'25)</li>
+              </ul>
+            </li>
+            <li>EDA for Analog/Mixed-Signal (AMS) IC Design:
+              <ul class="vert">
+                <li><strong>Early-stage Parasitic Estimation:</strong> CircuitGCL (ICCAD'25)</li>
+              </ul>
+            </li>
+            <li>EDA for PCB Design:
+              <ul class="vert">
+                <li><strong>Component Library Generation:</strong> Smart-PCLib (DATE'26)</li>
+              </ul>
+            </li>
+            <li>Open-sourced EDA Toolkits/Benchmarks:
+              <ul class="vert">
+                <li><strong>SAT-based Formal Verification:</strong> SATGL (ISEDA'24)</li>
+                <li><strong>Multimodal Digital Circuit Representation Learning:</strong> ForgeEDA (ISEDA'25)</li>
+              </ul>
+            </li>
           </ul>
         </li>
-        <li>EDA for Analog/Mixed-Signal (AMS) IC Design:
+        <li>
+          <strong>Artificial Intelligence (AI):</strong>
           <ul class="vert">
-            <li><strong>Early-stage Parasitic Estimation:</strong> CircuitGCL (ICCAD'25)</li>
-          </ul>
-        </li>
-        <li>EDA for PCB Design:
-          <ul class="vert">
-            <li><strong>Component Library Generation:</strong> Smart-PCLib (DATE'26)</li>
-          </ul>
-        </li>
-        <li>Open-sourced EDA Toolkits/Benchmarks:
-          <ul class="vert">
-            <li><strong>SAT-based Formal Verification:</strong> SATGL (ISEDA'24)</li>
-            <li><strong>Multimodal Digital Circuit Representation Learning:</strong> ForgeEDA (ISEDA'25)</li>
+            <li>Large Language Models (LLMs):
+              <ul class="vert">
+                <li><strong>LLM for Graph Learning:</strong> GFM-Survey (TPAMI'25)</li>
+                <li><strong>LLM for Recommender Systems:</strong> GFMRec-Survey (arXiv'25)</li>
+              </ul>
+            </li>
+            <li>Trustworthy Deep Learning:
+              <ul class="vert">
+                <li><strong>Fairness/Abnormal Detection/Causality:</strong> GraphPAR (TheWebConf'24), AEHCL (SDM'23), DCKM (IJCAI'20)</li>
+              </ul>
+            </li>
+            <li>Efficient Deep Learning:
+              <ul class="vert">
+                <li><strong>Knowledge Distillation:</strong> CPF (TheWebConf'21), LTD (WSDM'23)</li>
+              </ul>
+            </li>
           </ul>
         </li>
       </ul>
-    </li>
-    <li>
-      <strong>Artificial Intelligence (AI):</strong>
-      <ul class="vert">
-        <li>Large Language Models (LLMs):
-          <ul class="vert">
-            <li><strong>LLM for Graph Learning:</strong> GFM-Survey (TPAMI'25)</li>
-            <li><strong>LLM for Recommender Systems:</strong> GFMRec-Survey (arXiv'25)</li>
-          </ul>
-        </li>
-        <li>Trustworthy Deep Learning:
-          <ul class="vert">
-            <li><strong>Fairness/Abnormal Detection/Causality:</strong> GraphPAR (TheWebConf'24), AEHCL (SDM'23), DCKM (IJCAI'20)</li>
-          </ul>
-        </li>
-        <li>Efficient Deep Learning:
-          <ul class="vert">
-            <li><strong>Knowledge Distillation:</strong> CPF (TheWebConf'21), LTD (WSDM'23)</li>
-          </ul>
-        </li>
-      </ul>
-    </li>
-  </ul>
-</div>
+    </div>
 
-              <hr>
+  </div>
 
+  <hr>
+  <div class="single-col">
             <div class="col">
                 <!-- <div class="col" style="margin-top:3%; text-align:left;">
                     <p><strong style="color:#990000";>Research Interests</strong>.
