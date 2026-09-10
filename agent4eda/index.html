@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Agentic Electronic Design Automation: A Handoff Perspective — Survey Hub</title>
+<meta name="description" content="Survey hub for 'Agentic Electronic Design Automation: A Handoff Perspective' — a survey of 115 LLM-based agent systems in EDA organized around producer-to-consumer handoffs."/>
+<style>
+    :root {
+      --bg:#f8f7f4;
+      --paper:#ffffff;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --soft:#f3f4f6;
+      --blue:#1d4ed8;
+      --blue-soft:#dbeafe;
+      --green:#065f46;
+      --green-soft:#dff3ea;
+      --intra:#1e40af;
+      --inter:#0f766e;
+      --extra:#7c3aed;
+      --max:1240px;
+      --shadow:0 8px 28px rgba(15,23,42,.06);
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family: Georgia, "Times New Roman", serif;
+      line-height:1.66;
+    }
+    a { color:var(--blue); text-decoration:none; }
+    a:hover { text-decoration:underline; }
+    .topbar {
+      position:sticky; top:0; z-index:40;
+      background:rgba(248,247,244,.95);
+      border-bottom:1px solid var(--line);
+      backdrop-filter:blur(10px);
+    }
+    .topbar-inner {
+      max-width:var(--max); margin:0 auto; padding:14px 24px;
+      display:flex; align-items:center; justify-content:space-between; gap:18px;
+    }
+    .brand {
+      font:600 15px/1.2 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      letter-spacing:.04em; color:#111827;
+    }
+    .brand a { color:#111827; }
+    .brand a:hover { text-decoration:none; }
+    .nav {
+      display:flex; gap:18px; flex-wrap:wrap;
+      font:500 13px/1.2 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    .page {
+      max-width:var(--max); margin:0 auto; padding:28px 24px 70px;
+      display:grid; grid-template-columns:280px minmax(0,1fr); gap:40px;
+    }
+    .sidebar {
+      position:sticky; top:74px; align-self:start; max-height: calc(100vh - 90px);
+      overflow-y: auto; overflow-x: hidden; overscroll-behavior-y: contain; padding-right: 8px; scrollbar-gutter: stable;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    .sidebar::-webkit-scrollbar {width: 6px; }
+    .sidebar::-webkit-scrollbar-track {background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb {background: #d1d5db; border-radius: 999px; }
+    .sidebar::-webkit-scrollbar-thumb:hover {background: #9ca3af; }
+    .side-card {
+      background:var(--paper); border:1px solid var(--line); border-radius:16px;
+      padding:18px; margin-bottom:16px; box-shadow:var(--shadow);
+    }
+    .side-title {
+      font-size:12px; text-transform:uppercase; letter-spacing:.08em;
+      color:var(--muted); margin-bottom:10px; font-weight:700;
+    }
+    .toc a { display:block; padding:6px 0; color:#374151; font-size:14px; }
+    .toc a:hover { color:var(--blue); text-decoration:none; }
+    .toc .sub { padding-left:12px; font-size:13px; color:var(--muted); }
+    .toc .sub2 { padding-left:24px; font-size:12.5px; color:var(--muted); }
+    .stat-grid {
+      display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;
+    }
+    .stat {
+      background:var(--soft); border:1px solid var(--line); border-radius:12px;
+      padding:10px 11px;
+    }
+    .stat strong {
+      display:block; font-size:18px; line-height:1.1; color:#111827;
+    }
+    .stat span { display:block; margin-top:4px; font-size:12px; color:var(--muted); }
+    .main { min-width:0; }
+    .hero {
+      background:var(--paper); border:1px solid var(--line); border-radius:20px;
+      padding:34px; margin-bottom:22px; box-shadow:var(--shadow);
+    }
+    .eyebrow {
+      font:700 11px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--muted); text-transform:uppercase; letter-spacing:.12em;
+      margin-bottom:14px;
+    }
+    h1 {
+      margin:0 0 12px 0; font-size:44px; line-height:1.08; font-weight:700; letter-spacing:-.02em;
+    }
+    .subtitle {
+      margin:0 0 18px 0; color:#4b5563; font-size:19px; max-width:820px;
+    }
+    .actions {
+      display:flex; flex-wrap:wrap; gap:12px; margin-top:18px;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    .btn {
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      padding:10px 14px; border-radius:10px; border:1px solid var(--line);
+      font-size:14px; font-weight:600; background:#fff; color:#111827;
+    }
+    .btn:hover { text-decoration:none; border-color:#c7d2fe; }
+    .btn.primary { background:#111827; color:#fff; border-color:#111827; }
+    .btn.primary:hover { background:#1f2937; }
+    section {
+      background:var(--paper); border:1px solid var(--line); border-radius:20px;
+      padding:28px 30px; margin-bottom:22px; box-shadow:var(--shadow);
+    }
+    h2 { margin:0 0 14px 0; font-size:30px; line-height:1.15; }
+    h3 {
+      margin:0 0 8px 0;
+      font:700 23px/1.28 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:#111827;
+    }
+    p { margin:0 0 14px 0; }
+    .lead { font-size:18px; color:#374151; }
+    .note {
+      margin-top:14px; padding:13px 15px; border-left:3px solid var(--blue);
+      background:var(--blue-soft); border-radius:0 12px 12px 0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      font-size:14px; color:#1e3a8a;
+    }
+    .overview-grid {
+      display:grid; grid-template-columns:1.15fr .85fr; gap:18px; align-items:start;
+    }
+    .figure-frame {
+      border:1px solid var(--line); border-radius:16px; padding:18px; background:#fcfcfd;
+    }
+    .overview-image {
+      display:block; width:100%; height:auto; border-radius:12px;
+    }
+    .overview-note {
+      border:1px solid var(--line); border-radius:16px; padding:18px; background:var(--soft);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      font-size:14px; color:#374151;
+    }
+    .overview-note ul { margin:0; padding-left:18px; }
+    .overview-note li { margin:8px 0; }
+    .tax-grid {
+      display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; margin-top:14px;
+    }
+    .tax-card {
+      border:1px solid var(--line); border-radius:16px; padding:18px; background:#fff;
+    }
+    .tax-card.intra { border-top:4px solid var(--intra); }
+    .tax-card.inter { border-top:4px solid var(--inter); }
+    .tax-card.extra { border-top:4px solid var(--extra); }
+    .tax-card h4 {
+      margin:0 0 10px 0;
+      font:700 18px/1.3 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    .tax-card ul { margin:0; padding-left:20px; }
+    .tax-card li { margin:8px 0; }
+    .mini-count {
+      display:inline-block; margin-left:8px; font-size:12px; color:var(--muted);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    .card-grid {
+      display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:14px;
+      margin-top:14px;
+    }
+    .ref-card {
+      border:1px solid var(--line); border-radius:16px; padding:16px; background:#fff;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    .ref-card strong {
+      display:block; font-size:16px; margin-bottom:5px; line-height:1.35;
+    }
+    .ref-card .meta { font-size:12px; color:var(--muted); margin-bottom:8px; text-transform:none; }
+    .ref-card p { font-size:14px; color:#374151; margin-bottom:10px; }
+    .toolbar {
+      display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin:14px 0 18px;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    .search-wrap {
+      flex:1 1 320px; position:relative;
+    }
+    .search-wrap input {
+      width:100%; padding:11px 14px; border:1px solid var(--line); border-radius:12px;
+      background:#fff; font:14px/1.2 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    .chip-group { display:flex; gap:8px; flex-wrap:wrap; }
+    .chip {
+      border:1px solid var(--line); background:#fff; color:#374151;
+      border-radius:999px; padding:8px 12px; font-size:13px; cursor:pointer;
+    }
+    .chip.active { background:#111827; color:#fff; border-color:#111827; }
+    .toolbar-meta { font-size:13px; color:var(--muted); margin-left:auto; }
+    .library-block {
+      padding-top:2px; margin-top:24px; border-top:1px solid var(--line);
+    }
+    .library-block:first-of-type { margin-top:12px; }
+    .block-head {
+      display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin:20px 0 12px;
+    }
+    .block-head p {
+      margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:#4b5563; font-size:14px;
+      max-width:760px;
+    }
+    .count-badge {
+      flex:none; font:600 12px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:#111827; background:var(--soft); border:1px solid var(--line); border-radius:999px;
+      padding:8px 10px; white-space:nowrap;
+    }
+    .subgroup {
+      border:1px solid var(--line); border-radius:14px; padding:0 0 14px; margin:12px 0;
+      overflow:hidden; background:#fff;
+    }
+    .subgroup[open] { box-shadow:0 4px 18px rgba(15,23,42,.04); }
+    .subgroup summary {
+      list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:12px;
+      padding:14px 16px; background:#fbfbfc; font:600 15px/1.35 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      border-bottom:1px solid var(--line);
+    }
+    .subgroup summary::-webkit-details-marker { display:none; }
+    .sub-desc {
+      margin:12px 16px 10px; color:#4b5563; font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    .table-wrap { overflow:auto; }
+    table {
+      width:100%; border-collapse:collapse;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      font-size:14px;
+    }
+    th, td {
+      padding:11px 12px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top;
+    }
+    th {
+      font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted);
+      background:#fcfcfd;
+      position:sticky; top:0;
+    }
+    .paper-table tbody tr:hover { background:#fafafa; }
+    td.year { width:72px; color:#4b5563; }
+    td.links { white-space:nowrap; color:#4b5563; }
+    .muted-link { color:#9ca3af; }
+    .cls-tag {
+      display:inline-block; font:600 10px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      padding:3px 7px; border-radius:999px; letter-spacing:.04em; text-transform:uppercase;
+    }
+    .cls-tag.intra { background:#dbeafe; color:#1e40af; }
+    .cls-tag.inter { background:#ccfbf1; color:#0f766e; }
+    .cls-tag.extra { background:#ede9fe; color:#6d28d9; }
+    pre {
+      white-space:pre-wrap; word-break:break-word; margin:0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size:13px; line-height:1.65;
+      background:#111827; color:#e5e7eb; padding:18px; border-radius:14px;
+    }
+    .authors {
+      display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    .author {
+      border:1px solid var(--line); border-radius:14px; padding:14px 15px; background:#fff;
+    }
+    .author strong { display:block; margin-bottom:4px; }
+    .author span { color:var(--muted); font-size:14px; }
+    .contact-block {
+      margin-top:18px; padding:16px 18px; border:1px solid var(--line); border-radius:14px;
+      background:var(--soft); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    .contact-block strong { display:block; margin-bottom:6px; color:#111827; }
+    .contact-block .small { font-size:13px; color:var(--muted); margin-bottom:8px; }
+    .contact-block .mono {
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+      font-size:12.5px; line-height:1.75; color:#374151; word-break:break-word;
+    }
+    .resource-links {
+      display:flex; flex-wrap:wrap; gap:10px; margin-top:12px;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    .roadmap-grid {
+      display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:12px; margin-top:14px;
+    }
+    .layer-card {
+      border:1px solid var(--line); border-radius:14px; padding:15px; background:#fff;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    .layer-card .l-tag {
+      display:inline-block; font:700 11px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--blue); text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px;
+    }
+    .layer-card strong { display:block; font-size:15px; margin-bottom:6px; color:#111827; }
+    .layer-card p { font-size:13px; color:#4b5563; margin:0; line-height:1.55; }
+    .reading-cols { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+    .reading-col {
+      border:1px solid var(--line); border-radius:16px; padding:18px; background:var(--soft);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; font-size:14px; color:#374151;
+    }
+    .reading-col strong { display:block; font-size:15px; color:#111827; margin-bottom:8px; }
+    footer {
+      max-width:var(--max); margin:0 auto; padding:0 24px 40px;
+      color:var(--muted); font:13px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    .image-zoom-trigger {
+      display:block; width:100%; padding:0; border:0; background:none; cursor:zoom-in;
+      border-radius:12px;
+    }
+    .image-zoom-trigger:focus-visible {
+      outline:2px solid var(--blue); outline-offset:4px;
+    }
+    .figure-caption {
+      margin-top:12px; color:#374151; font-size:14px;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    .zoom-hint {
+      margin-top:5px; color:var(--muted); font-size:12px;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    .epigraph-text {
+      font-size:16px; line-height:1.7; color:#1f2937; font-style:italic;
+    }
+    .epigraph-author {
+      margin-top:10px; text-align:right; color:var(--muted); font-size:13px;
+    }
+    .trends-grid {
+      display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:14px;
+    }
+    .trend-item {
+      border:1px solid var(--line); border-radius:16px; padding:16px; background:#fcfcfd;
+    }
+    .trend-item img { display:block; width:100%; height:auto; border-radius:10px; }
+    .trend-item .cap { margin-top:10px; font:13px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:#4b5563; }
+    .image-modal {
+      position:fixed; inset:0; z-index:120; display:none; align-items:center; justify-content:center;
+      background:rgba(2,6,23,.96); padding:0; overflow:hidden; cursor:zoom-out;
+    }
+    .image-modal.open { display:flex; }
+    .image-modal-inner {
+      position:relative; width:100vw; height:100vh; padding:0; cursor:default;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .image-modal img {
+      display:block; width:100vw; height:100vh; object-fit:contain;
+      border-radius:0; background:transparent; box-shadow:none;
+      transition:transform .22s ease; transform-origin:center center; cursor:zoom-in;
+    }
+    .image-modal img.zoomed {
+      width:auto; height:auto; min-width:100vw; min-height:100vh; max-width:none; max-height:none;
+      transform:scale(1.15); cursor:zoom-out;
+    }
+    .image-modal-close {
+      position:fixed; top:18px; right:18px; width:44px; height:44px; border:0; border-radius:999px;
+      background:rgba(255,255,255,.96); color:#111827; font-size:30px; line-height:1; cursor:pointer; box-shadow:var(--shadow);
+    }
+
+    @media (max-width: 980px) {
+      .page { grid-template-columns:1fr; }
+      .sidebar { position:static; max-height: none; overflow: visible; padding-right: 0; scrollbar-gutter: auto; }
+      .overview-grid, .tax-grid, .reading-cols { grid-template-columns:1fr; }
+      .roadmap-grid { grid-template-columns:1fr 1fr; }
+      .card-grid { grid-template-columns:1fr 1fr; }
+      .trends-grid { grid-template-columns:1fr; }
+    }
+    @media (max-width: 760px) {
+      h1 { font-size:34px; }
+      h2 { font-size:26px; }
+      .hero, section { padding:22px; }
+      .authors, .card-grid, .stat-grid, .roadmap-grid { grid-template-columns:1fr; }
+      .block-head { flex-direction:column; align-items:flex-start; }
+      .toolbar-meta { margin-left:0; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><a href="https://futureeda.github.io/">← FutureEDA</a>&nbsp;·&nbsp;Agent4EDA Survey</div>
+    <nav class="nav">
+      <a href="https://arxiv.org/abs/2606.19795" rel="noopener" target="_blank">arXiv</a>
+      <a href="#abstract">Abstract</a>
+      <a href="#taxonomy">Taxonomy</a>
+      <a href="#library">Library</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="#citation">Citation</a>
+    </nav>
+  </div>
+</div>
+
+<div class="page">
+  <aside class="sidebar">
+    <div class="side-card">
+      <div class="side-title">Survey at a glance</div>
+      <div style="font-size:14px;color:#374151;line-height:1.7">A handoff-centered survey of LLM-based agents across the electronic design automation flow.</div>
+      <div class="stat-grid">
+        <div class="stat"><strong>115</strong><span>surveyed systems</span></div>
+        <div class="stat"><strong>3</strong><span>handoff classes</span></div>
+        <div class="stat"><strong>88</strong><span>use agent harnesses</span></div>
+        <div class="stat"><strong>5</strong><span>EACP roadmap layers</span></div>
+      </div>
+    </div>
+    <div class="side-card toc">
+      <div class="side-title">Contents</div>
+      <a href="#abstract">Abstract</a>
+      <a href="#overview">Overview</a>
+      <a href="#taxonomy">Taxonomy</a>
+      <a class="sub" href="#class-intra">Intra-stage</a>
+      <a class="sub" href="#class-inter">Inter-stage</a>
+      <a class="sub" href="#class-extra">Extra-stage</a>
+      <a href="#trends">Research trends</a>
+      <a href="#quickstart">Representative systems</a>
+      <a href="#library">Curated system library</a>
+      <a href="#reading-guide">How to read</a>
+      <a href="#roadmap">EACP roadmap</a>
+      <a href="#community">Community &amp; feedback</a>
+      <a href="#authors">Authors</a>
+      <a href="#citation">Citation</a>
+    </div>
+    <div class="side-card">
+      <div class="side-title">Resources</div>
+      <div class="resource-links">
+        <a class="btn" href="https://arxiv.org/abs/2606.19795" rel="noopener" target="_blank">arXiv</a>
+        <a class="btn" href="https://arxiv.org/pdf/2606.19795" rel="noopener" target="_blank">PDF</a>
+      </div>
+    </div>
+    <div class="side-card">
+      <div class="side-title">Epigraph</div>
+      <div class="epigraph-text">“Program testing can be used to show the presence of bugs, but never to show their absence.”</div>
+      <div class="epigraph-author">— Edsger W. Dijkstra (1970)</div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="hero">
+      <div class="eyebrow">2026 · Survey · ACM TODAES (submitted)</div>
+      <h1>Agentic Electronic Design Automation: A Handoff Perspective</h1>
+      <p class="subtitle">A survey of 115 LLM-based agent systems across the EDA flow, organized around producer-to-consumer handoffs — the objects they transfer, the acceptance evidence each downstream stage requires, and the missing shared infrastructure for trustworthy agentic EDA.</p>
+      <div class="actions">
+        <a class="btn primary" href="#library">Browse the system library</a>
+        <a class="btn" href="#taxonomy">View taxonomy</a>
+        <a class="btn" href="https://arxiv.org/abs/2606.19795" rel="noopener" target="_blank">arXiv</a>
+        <a class="btn" href="#roadmap">Five-layer roadmap</a>
+      </div>
+    </div>
+
+    <section id="abstract">
+      <h2>Abstract</h2>
+      <p class="lead">Electronic design automation (EDA) is multi-stage and handoff-heavy, relying on transfers among humans, design artifacts, and multiple tools. LLM-based agents now participate in these transfers, yet the resulting research landscape is highly fragmented and lacks a unified perspective.</p>
+      <p>This survey adopts the <strong>primary input–output pair</strong> as its organizing lens: for each agent system, we analyze its primary, supporting, and intermediate handoff objects and classify it according to the provenance of its primary input and the consumer boundary of its primary output. <strong>Intra-stage</strong> systems operate on objects within a single EDA stage, <strong>inter-stage</strong> systems transform EDA-native artifacts into forms usable by downstream stages, and <strong>extra-stage</strong> systems translate human intent into EDA artifacts.</p>
+      <p>Based on this taxonomy, we survey <strong>115 representative systems</strong> and examine them along multiple dimensions, including research trends, benchmarks, and model mechanisms. Finally, we outline an agentic EDA protocol roadmap and discuss open problems for future research.</p>
+      <div class="note"><strong>Key distinction.</strong> Producer-side success alone does not establish consumer acceptance. A handoff is valid only when the transferred object satisfies the interface, semantic, configuration, and version requirements of its next consumer — and carries enough context, evidence, and provenance for downstream use.</div>
+    </section>
+
+    <section id="overview">
+      <h2>Overview</h2>
+      <div class="overview-grid">
+        <div class="figure-frame">
+          <button aria-label="Open overview figure in full size" class="image-zoom-trigger" onclick="openImageModal('assets/figs/concepts-1.png')" type="button">
+            <img class="overview-image" src="assets/figs/concepts-1.png" alt="Consumer acceptance of a stage-local logic-optimization handoff"/>
+          </button>
+          <div class="figure-caption">Consumer acceptance of a stage-local logic-optimization handoff. The primary, supporting, intermediate, and metadata objects are transferred together, and the downstream consumer accepts or rejects them under equivalence, version, constraint, and metadata checks.</div>
+          <div class="zoom-hint">Click the figure to view full screen.</div>
+        </div>
+        <div class="overview-note">
+          <p><strong>Core distinction.</strong> Agentic EDA systems differ in where their primary input originates and where their primary output is consumed. Two properties determine the class:</p>
+          <ul>
+            <li><strong>Input provenance</strong> — is the primary input a machine-readable EDA-domain object, or human-originated intent and knowledge?</li>
+            <li><strong>Consumer boundary</strong> — is the primary output checked and reused within the same stage, or accepted across a representation boundary by a downstream stage?</li>
+          </ul>
+          <p>The complete set of handoff objects is written as <strong>ℛ = (I<sub>p</sub>, O<sub>p</sub>, I<sub>s</sub>, O<sub>s</sub>, A<sub>m</sub>; M)</strong>: primary input/output, supporting inputs/outputs, intermediate artifacts, and metadata.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="taxonomy">
+      <h2>Taxonomy</h2>
+      <p>The three-class taxonomy follows directly from the primary input–output pair. Supporting objects, intermediate artifacts, metadata, model architecture, mechanisms, and benchmarks remain descriptive dimensions and do not determine the primary class.</p>
+      <div class="tax-grid">
+        <div class="tax-card intra" id="class-intra">
+          <h4>Intra-stage<span class="mini-count">36 systems</span></h4>
+          <ul>
+            <li>Consumes a <strong>machine-readable EDA-domain object</strong> (design artifact, EDA-tool code, or measurements).</li>
+            <li>Output is <strong>checked and reused within the same stage</strong> — compilation, simulation, equivalence, PPA, lint/DRC, or coverage.</li>
+            <li>e.g., RTLFixer, ADO-LLM, MappingEvolve, ModelGen.</li>
+          </ul>
+        </div>
+        <div class="tax-card inter" id="class-inter">
+          <h4>Inter-stage<span class="mini-count">16 systems</span></h4>
+          <ul>
+            <li>Consumes an <strong>EDA-native representation</strong> and produces a <strong>different design-stage representation</strong>.</li>
+            <li>Acceptance relies on cross-tool execution, downstream validation, QoR, or checkpoint coherence across the boundary.</li>
+            <li>e.g., HLSPilot, HyperPlace, PCBAgent, ChatEDA.</li>
+          </ul>
+        </div>
+        <div class="tax-card extra" id="class-extra">
+          <h4>Extra-stage<span class="mini-count">63 systems</span></h4>
+          <ul>
+            <li>Begins from <strong>human-originated text, queries, or documents</strong> and produces a machine-consumable EDA artifact.</li>
+            <li>Acceptance depends on specification completeness, provenance, and attribution to inspectable sources.</li>
+            <li>e.g., VerilogCoder, AssertLLM, ChatLS.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="figure-frame" style="margin-top:18px">
+        <button aria-label="Open taxonomy figure in full size" class="image-zoom-trigger" onclick="openImageModal('assets/figs/taxonomy-1.png')" type="button">
+          <img class="overview-image" src="assets/figs/taxonomy-1.png" alt="Three-class taxonomy of agentic EDA systems"/>
+        </button>
+        <div class="figure-caption">Three-class taxonomy of agentic EDA systems, distinguished by the primary input–output pair: same-stage refinement, cross-stage representation change, and translation of human intent into an EDA artifact.</div>
+        <div class="zoom-hint">Click the figure to view full screen.</div>
+      </div>
+    </section>
+
+    <section id="trends">
+      <h2>Research trends</h2>
+      <p>Agentic EDA research is expanding rapidly and unevenly. The corpus grows from <strong>1 system in 2023</strong> to <strong>25 in 2024</strong>, <strong>46 in 2025</strong>, and <strong>43 by the August 31, 2026 cutoff</strong> — the 89 systems from 2025–2026 account for 77.4% of the corpus. DAC contributes 38 systems alone.</p>
+      <div class="trends-grid">
+        <div class="trend-item">
+          <button class="image-zoom-trigger" onclick="openImageModal('assets/figs/prisma-1.png')" type="button"><img src="assets/figs/prisma-1.png" alt="Two-round PRISMA-style screening process"/></button>
+          <div class="cap"><strong>Corpus construction.</strong> A venue-focused two-round PRISMA-style search: 5,200 raw records → 88 systems, supplemented by citation-overlap search → 47 systems, merged and deduplicated into 115 distinct systems.</div>
+        </div>
+        <div class="trend-item">
+          <button class="image-zoom-trigger" onclick="openImageModal('assets/figs/task_families-1.png')" type="button"><img src="assets/figs/task_families-1.png" alt="Temporal evolution and distribution by class and task family"/></button>
+          <div class="cap"><strong>Class expansion.</strong> Intra-stage grows from 0 (2023) to 15 (2026); inter-stage from 1 to 6; extra-stage dominates with 63 of 115 systems.</div>
+        </div>
+        <div class="trend-item">
+          <button class="image-zoom-trigger" onclick="openImageModal('assets/figs/mechanism_trends-1.png')" type="button"><img src="assets/figs/mechanism_trends-1.png" alt="Model-optimization and agent-harness mechanisms"/></button>
+          <div class="cap"><strong>Mechanisms.</strong> Growth concentrates in agent harnesses (88/115) rather than model optimization (23/115). Feedback loops are the most common mechanism; SFT appears in 22 systems, RL policy optimization in only three 2026 systems.</div>
+        </div>
+        <div class="trend-item">
+          <button class="image-zoom-trigger" onclick="openImageModal('assets/figs/primary_io_trends-1.png')" type="button"><img src="assets/figs/primary_io_trends-1.png" alt="Temporal evolution of primary inputs and outputs"/></button>
+          <div class="cap"><strong>Primary I/O.</strong> Natural-language specifications remain the largest input category; output diversifies as HDL declines from 60% (2024) to 30% (2026), while verification collateral and layout rise.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="quickstart">
+      <h2>Quick start: representative systems</h2>
+      <p>These are not the only important systems in the survey. They are a first reading path across the three classes — one canonical example of each primary input–output setting — before diving into the full library.</p>
+      <div class="card-grid">
+        <div class="ref-card">
+          <strong>RTLFixer</strong>
+          <div class="meta">2024 · Intra-stage · RTL→RTL</div>
+          <p>A canonical compile–repair loop: an LLM fixes RTL syntax errors and re-iterates against Icarus Verilog / Quartus feedback.</p>
+          <a href="https://github.com/NVlabs/RTLFixer" rel="noopener" target="_blank">Code →</a>
+        </div>
+        <div class="ref-card">
+          <strong>ADO-LLM</strong>
+          <div class="meta">2024 · Intra-stage · Netlist→Netlist</div>
+          <p>Analog sizing via Bayesian optimization with in-context learning, gated by simulation and fitting error within the same stage.</p>
+        </div>
+        <div class="ref-card">
+          <strong>MappingEvolve</strong>
+          <div class="meta">2026 · Intra-stage · EDA-tool code</div>
+          <p>LLM-driven evolution of technology-mapping tool code, with each edit accepted by a stage-local optimizer.</p>
+          <a href="https://github.com/leolau-lab/mappingevolve" rel="noopener" target="_blank">Code →</a>
+        </div>
+        <div class="ref-card">
+          <strong>ChatEDA</strong>
+          <div class="meta">2024 · Inter-stage · RTL→GDSII</div>
+          <p>Autonomous orchestration from RTL to implemented layout, coordinating netlist synthesis, placement, and routing scripts.</p>
+          <a href="https://github.com/Thinklab-SJTU/awesome-MLLM-EDA" rel="noopener" target="_blank">Code →</a>
+        </div>
+        <div class="ref-card">
+          <strong>HLSPilot</strong>
+          <div class="meta">2024 · Inter-stage · C/C++→RTL</div>
+          <p>LLM-based high-level synthesis that crosses the software-to-hardware representation boundary.</p>
+        </div>
+        <div class="ref-card">
+          <strong>PCBAgent</strong>
+          <div class="meta">2025 · Inter-stage · Netlist→Layout</div>
+          <p>Agent-based high-density PCB placement, producing a layout that downstream routing tools must accept.</p>
+        </div>
+        <div class="ref-card">
+          <strong>VerilogCoder</strong>
+          <div class="meta">2025 · Extra-stage · NL→RTL</div>
+          <p>Autonomous Verilog coding agents with graph-based planning and AST-based waveform tracing from natural-language specs.</p>
+          <a href="https://github.com/NVlabs/verilogcoder" rel="noopener" target="_blank">Code →</a>
+        </div>
+        <div class="ref-card">
+          <strong>AssertLLM</strong>
+          <div class="meta">2025 · Extra-stage · NL→Verification Collateral</div>
+          <p>Generates hardware verification assertions from design specifications — human intent translated into machine-checkable collateral.</p>
+        </div>
+        <div class="ref-card">
+          <strong>ChatLS</strong>
+          <div class="meta">2025 · Extra-stage · NL→EDA script</div>
+          <p>Multimodal retrieval-augmented logic-synthesis script customization, grounded in tool manuals.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="library">
+      <h2>Curated system library</h2>
+      <p>All 115 surveyed systems, grouped by handoff class and primary input–output pair. The <strong>Primary I/O</strong> column reports I<sub>p</sub> → O<sub>p</sub>. Filter by class, recency, or code availability, or search by name, title, venue, or task family.</p>
+      <div class="toolbar">
+        <div class="search-wrap">
+          <input id="paperSearch" type="search" placeholder="Search systems, titles, venues, task families…" aria-label="Search systems"/>
+        </div>
+        <div class="chip-group">
+          <button class="chip active" data-filter="all" type="button">All</button>
+          <button class="chip" data-filter="intra" type="button">Intra-stage</button>
+          <button class="chip" data-filter="inter" type="button">Inter-stage</button>
+          <button class="chip" data-filter="extra" type="button">Extra-stage</button>
+          <button class="chip" data-filter="recent" type="button">2025+</button>
+          <button class="chip" data-filter="code" type="button">With code</button>
+        </div>
+        <div class="toolbar-meta"><span id="visibleCount">0</span> shown</div>
+      </div>
+      <div id="libraryRoot"></div>
+      <div class="note"><strong>Scope.</strong> The corpus covers work published, accepted, or publicly available by the August 31, 2026 cutoff. Systems that instantiate a second class carry a secondary label; each is listed once under its primary class here.</div>
+    </section>
+
+    <section id="reading-guide">
+      <h2>How to read this survey</h2>
+      <div class="reading-cols">
+        <div class="reading-col">
+          <strong>If you are new to the area</strong>
+          Start with the overview and taxonomy, then read one representative system from each class in the quick-start section. After that, use the library to go deeper into whichever primary input–output setting matches your interest — RTL repair, verification collateral, HLS, layout, or natural-language specification.
+        </div>
+        <div class="reading-col">
+          <strong>If you are using the page as a reference</strong>
+          Jump directly to the library tables. The search bar works best for names, titles, and venues, while the filter buttons separate the three classes, recent (2025+) systems, and those with public code. The roadmap section maps the open questions to the five-layer protocol agenda.
+        </div>
+      </div>
+    </section>
+
+    <section id="roadmap">
+      <h2>Agentic EDA Protocol Roadmap (EACP)</h2>
+      <p>General-purpose agent protocols separate discovery, messaging, tool access, workflow description, and identity — but they do not record the EDA-specific object roles, acceptance evidence, configuration fingerprints, dependencies, and PDK/IP policies the surveyed workflows require. The roadmap organizes these missing semantics into five layers, each pairing a recurring coordination gap with a required capability and a validation milestone.</p>
+      <div class="figure-frame">
+        <button aria-label="Open roadmap figure in full size" class="image-zoom-trigger" onclick="openImageModal('assets/figs/eacp-1.png')" type="button">
+          <img class="overview-image" src="assets/figs/eacp-1.png" alt="Five-layer Agentic EDA Protocol Roadmap"/>
+        </button>
+        <div class="figure-caption">Overview of the five-layer Agentic EDA Protocol Roadmap.</div>
+        <div class="zoom-hint">Click the figure to view full screen.</div>
+      </div>
+      <div class="roadmap-grid">
+        <div class="layer-card">
+          <span class="l-tag">L1</span>
+          <strong>Agent discovery</strong>
+          <p>A versioned capability manifest and registry that encodes process node, PDK, library, and tool assumptions, rejecting incompatible agents with explainable verdicts.</p>
+        </div>
+        <div class="layer-card">
+          <span class="l-tag">L2</span>
+          <strong>Agent messaging</strong>
+          <p>A shared, versioned handoff message that distinguishes primary and supporting objects from candidates and workflow state, and identifies the evidence used to accept the primary output.</p>
+        </div>
+        <div class="layer-card">
+          <span class="l-tag">L3</span>
+          <strong>Tool invocation</strong>
+          <p>A typed operation descriptor with backend-specific adapters returning checker results and QoR with comparable units, artifact references, and error categories across tool versions.</p>
+        </div>
+        <div class="layer-card">
+          <span class="l-tag">L4</span>
+          <strong>Workflow orchestration</strong>
+          <p>A workflow representation in which each edge identifies its producer, consumer, objects, accepted configuration, and dependencies, with recorded evidence gating every transition.</p>
+        </div>
+        <div class="layer-card">
+          <span class="l-tag">L5</span>
+          <strong>Security &amp; IP</strong>
+          <p>Authorization, disclosure, retention, and audit semantics that determine whether a handoff is authorized, appropriately disclosed, protected, and admissible for organizational reuse.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="community">
+      <h2>Community &amp; feedback</h2>
+      <div class="reading-cols">
+        <div class="reading-col">
+          <strong>💬 Join the conversation</strong>
+          This survey is under review. Questions, corrections, and missing-system suggestions are welcome — especially pointers to agentic EDA systems we may have missed, and public benchmarks or code releases we should catalog.
+        </div>
+        <div class="reading-col">
+          <strong>🧭 Help improve the map</strong>
+          If your system or a system you know belongs in the library, or a handoff-object role is mislabeled, please open an issue or reach out. We aim to keep the taxonomy, object-role inventories, and benchmark catalog current.
+        </div>
+      </div>
+    </section>
+
+    <section id="authors">
+      <h2>Authors</h2>
+      <div class="authors">
+        <div class="author"><strong>Jiawei Liu</strong><span>The Chinese University of Hong Kong</span></div>
+        <div class="author"><strong>Peiyi Han</strong><span>The Chinese University of Hong Kong</span></div>
+        <div class="author"><strong>Yuntao Lu</strong><span>The Chinese University of Hong Kong</span></div>
+        <div class="author"><strong>Su Zheng</strong><span>The Chinese University of Hong Kong</span></div>
+        <div class="author"><strong>Fengyu Yan</strong><span>Primarius Technologies</span></div>
+        <div class="author"><strong>Bei Yu</strong><span>The Chinese University of Hong Kong</span></div>
+      </div>
+      <div class="contact-block">
+        <strong>Contact</strong>
+        <div class="small">Corresponding author: Jiawei Liu · The Chinese University of Hong Kong</div>
+        <div class="mono">jiaweiliu@cuhk.edu.hk</div>
+      </div>
+    </section>
+
+    <section id="citation">
+      <h2>Citation</h2>
+      <p>Please cite this survey as follows.</p>
+      <pre><code>@article{liu2026agenticeda,
+  title={Agentic Electronic Design Automation: A Handoff Perspective},
+  author={Liu, Jiawei and Han, Peiyi and Lu, Yuntao and Zheng, Su and Yan, Fengyu and Yu, Bei},
+  year={2026},
+  eprint={2606.19795},
+  archivePrefix={arXiv},
+  primaryClass={cs.SE},
+  url={https://arxiv.org/abs/2606.19795},
+}</code></pre>
+    </section>
+  </div>
+</div>
+
+<footer>
+  © 2026 · Agentic Electronic Design Automation: A Handoff Perspective · Hosted under <a href="https://futureeda.github.io/">futureeda.github.io</a>.
+</footer>
+
+<div class="image-modal" id="imageModal" aria-hidden="true" onclick="closeImageModal(event)">
+  <div class="image-modal-inner">
+    <img id="modalImage" src="" alt="Zoomed figure" onclick="toggleModalZoom(event)"/>
+  </div>
+  <button class="image-modal-close" aria-label="Close" onclick="closeImageModal(event)">×</button>
+</div>
+
+<script>
+  (function () {
+    const classMeta = {
+      intra:  { label: 'Intra-stage', tag: 'intra', desc: 'Machine-readable EDA-domain objects in; output checked and reused within the same stage.' },
+      inter:  { label: 'Inter-stage', tag: 'inter', desc: 'EDA-native representation in; a different design-stage representation out, accepted by a downstream stage.' },
+      extra:  { label: 'Extra-stage', tag: 'extra', desc: 'Human intent or knowledge in; a machine-consumable EDA artifact out.' }
+    };
+    const classOrder = ['intra', 'inter', 'extra'];
+    const famOrder = [
+      'RTL→RTL', 'RTL→Verification Collateral', 'Netlist→Netlist', 'Layout→Layout', 'Other Transformations',
+      'C/C++→RTL', 'Netlist→Layout', 'RTL→Layout',
+      'NL→HDL', 'NL→Verification Collateral', 'NL→Netlist', 'NL→Layout'
+    ];
+
+    function scholarLink(title) {
+      return 'https://scholar.google.com/scholar?q=' + encodeURIComponent(title);
+    }
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+      });
+    }
+
+    fetch('assets/systems.json')
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        const systems = data.systems || [];
+        const root = document.getElementById('libraryRoot');
+        root.innerHTML = '';
+
+        classOrder.forEach(function (ck) {
+          const clsSystems = systems.filter(function (s) { return s.class === ck; });
+          if (!clsSystems.length) return;
+          const meta = classMeta[ck];
+
+          const block = document.createElement('div');
+          block.className = 'library-block';
+          block.setAttribute('data-branch', ck);
+
+          const head = document.createElement('div');
+          head.className = 'block-head';
+          head.innerHTML =
+            '<div><h3>' + esc(meta.label) + '</h3><p>' + esc(meta.desc) + '</p></div>' +
+            '<span class="count-badge">' + clsSystems.length + ' systems</span>';
+          block.appendChild(head);
+
+          // group by family in famOrder
+          const byFam = {};
+          clsSystems.forEach(function (s) { (byFam[s.family] = byFam[s.family] || []).push(s); });
+          const fams = Object.keys(byFam).sort(function (a, b) {
+            const ia = famOrder.indexOf(a), ib = famOrder.indexOf(b);
+            if (ia >= 0 && ib >= 0) return ia - ib;
+            if (ia >= 0) return -1; if (ib >= 0) return 1;
+            return b.length - a.length;
+          });
+
+          fams.forEach(function (fam) {
+            const rows = byFam[fam].sort(function (a, b) { return (a.year || 0) - (b.year || 0) || a.name.localeCompare(b.name); });
+            const det = document.createElement('details');
+            det.className = 'subgroup';
+            det.open = rows.length <= 12;
+            det.innerHTML =
+              '<summary><span>' + esc(fam) + ' <span style="color:#9ca3af;font-weight:500">(' + rows.length + ')</span></span><span style="color:#9ca3af">▸</span></summary>';
+
+            const wrap = document.createElement('div');
+            wrap.className = 'table-wrap';
+            const table = document.createElement('table');
+            table.className = 'paper-table';
+            table.innerHTML =
+              '<thead><tr><th>System</th><th>Primary I/O</th><th>Venue</th><th>Year</th><th>Links</th></tr></thead><tbody></tbody>';
+            const tbody = table.querySelector('tbody');
+
+            rows.forEach(function (s) {
+              const tr = document.createElement('tr');
+              tr.className = 'paper-row';
+              tr.setAttribute('data-branch', ck);
+              tr.setAttribute('data-year', String(s.year || 0));
+              tr.setAttribute('data-search', (s.name + ' ' + s.title + ' ' + s.venue + ' ' + s.family + ' ' + s.primary_input + ' ' + s.primary_output).toLowerCase());
+
+              let links = '<a href="' + scholarLink(s.title) + '" rel="noopener" target="_blank">Paper</a>';
+              if (s.github) {
+                links += ' · <a href="' + esc(s.github) + '" rel="noopener" target="_blank">Code</a>';
+              }
+
+              tr.innerHTML =
+                '<td><strong>' + esc(s.name) + '</strong>' +
+                  (s.title ? '<div style="font-size:12px;color:#6b7280;margin-top:2px">' + esc(s.title) + '</div>' : '') + '</td>' +
+                '<td style="white-space:nowrap">' + esc(s.primary_input) + ' → ' + esc(s.primary_output) + '</td>' +
+                '<td>' + esc(s.venue) + '</td>' +
+                '<td class="year">' + (s.year || '—') + '</td>' +
+                '<td class="links">' + links + '</td>';
+              tbody.appendChild(tr);
+            });
+
+            wrap.appendChild(table);
+            det.appendChild(wrap);
+            block.appendChild(det);
+          });
+
+          root.appendChild(block);
+        });
+
+        bindLibraryFilter();
+      })
+      .catch(function () {
+        document.getElementById('libraryRoot').innerHTML =
+          '<div class="note">Could not load the system library data. Please check that <code>assets/systems.json</code> is present.</div>';
+      });
+
+    function bindLibraryFilter() {
+      const search = document.getElementById('paperSearch');
+      const chips = Array.from(document.querySelectorAll('.chip'));
+      const visibleCount = document.getElementById('visibleCount');
+      let activeFilter = 'all';
+
+      function rowHasCode(row) {
+        const links = row.querySelector('.links');
+        return links && /Code<\/a>/.test(links.innerHTML);
+      }
+
+      function applyFilters() {
+        const q = (search.value || '').trim().toLowerCase();
+        let visible = 0;
+
+        document.querySelectorAll('.paper-row').forEach(function (row) {
+          const text = row.dataset.search || '';
+          const branch = row.dataset.branch || '';
+          const year = parseInt(row.dataset.year || '0', 10);
+          let match = !q || text.includes(q);
+
+          if (activeFilter === 'intra') match = match && branch === 'intra';
+          if (activeFilter === 'inter') match = match && branch === 'inter';
+          if (activeFilter === 'extra') match = match && branch === 'extra';
+          if (activeFilter === 'recent') match = match && year >= 2025;
+          if (activeFilter === 'code') match = match && rowHasCode(row);
+
+          row.style.display = match ? '' : 'none';
+          if (match) visible += 1;
+        });
+
+        document.querySelectorAll('.subgroup').forEach(function (d) {
+          const anyVisible = Array.from(d.querySelectorAll('.paper-row')).some(function (r) { return r.style.display !== 'none'; });
+          d.style.display = anyVisible ? '' : 'none';
+          if (q && anyVisible) d.open = true;
+        });
+
+        document.querySelectorAll('.library-block').forEach(function (block) {
+          const anyVisible = Array.from(block.querySelectorAll('.paper-row')).some(function (r) { return r.style.display !== 'none'; });
+          block.style.display = anyVisible ? '' : 'none';
+        });
+
+        visibleCount.textContent = String(visible);
+      }
+
+      chips.forEach(function (chip) {
+        chip.addEventListener('click', function () {
+          activeFilter = chip.dataset.filter;
+          chips.forEach(function (c) { c.classList.toggle('active', c === chip); });
+          applyFilters();
+        });
+      });
+
+      search.addEventListener('input', applyFilters);
+      applyFilters();
+    }
+  })();
+
+  function openImageModal(src) {
+    const modal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+    if (!modal) return;
+    if (modalImage) { modalImage.src = src; modalImage.classList.remove('zoomed'); }
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function toggleModalZoom(event) {
+    if (event) event.stopPropagation();
+    const modalImage = document.getElementById('modalImage');
+    if (!modalImage) return;
+    modalImage.classList.toggle('zoomed');
+  }
+  function closeImageModal(event) {
+    if (event && event.type === 'click') {
+      const inner = document.querySelector('.image-modal-inner');
+      if (event.currentTarget && event.currentTarget.classList.contains('image-modal') && inner && inner.contains(event.target)) {
+        return;
+      }
+    }
+    const modal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+    if (!modal) return;
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    if (modalImage) modalImage.classList.remove('zoomed');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') closeImageModal();
+  });
+</script>
+</body>
+</html>
