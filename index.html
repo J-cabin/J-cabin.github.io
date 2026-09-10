@@ -47,7 +47,7 @@
       transition: color .2s ease;
     }
     .nav-links a:hover { color: var(--text); }
-    canvas { position: fixed; inset: 0; display: block; }
+    canvas { position: fixed; inset: 0; display: block; cursor: pointer; }
 </style>
 </head>
 <body>
@@ -84,6 +84,12 @@
         ctx.fillStyle = fill;
         ctx.fill();
       }
+      function ellipse(x, y, rx, ry, fill) {
+        ctx.beginPath();
+        ctx.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2);
+        ctx.fillStyle = fill;
+        ctx.fill();
+      }
       function roundRect(x, y, w, h, r, fill) {
         const rr = Math.min(r, w / 2, h / 2);
         ctx.beginPath();
@@ -108,33 +114,40 @@
         ctx.stroke();
         return { x: ex, y: ey };
       }
+      function smoothstep(t) { t = Math.max(0, Math.min(1, t)); return t * t * (3 - 2 * t); }
 
-      // ---------- digital world particles ----------
-      const GLYPHS = ['0','1','01','10','0101','{ }','</>','&&','==','->','=>','#','λ','π','if','for','<3',':)','/*','*','+','=',':',';','~','!','<>'];
+      // ---------- AI + EDA terms ----------
+      const GLYPHS = [
+        'LLM','GPT','Agent','RAG','SFT','RL','LoRA','QLoRA','Prompt','Token',
+        'Attention','Embedding','MCTS','Reward','Policy','Inference','Diffusion',
+        'Transformer','Fine-tune','Reasoning','CoT',
+        'RTL','Verilog','Netlist','Layout','GDSII','Synthesis','Placement','Routing',
+        'DRC','LVS','PPA','Timing','Clock','PDK','HLS','SRAM','FinFET','STA','CDC',
+        'DFT','SoC','Chiplet','SPICE','Parasitic','IR Drop'
+      ];
       const COLORS = ['#22d3ee', '#2dd4bf', '#60a5fa', '#a78bfa'];
       function rand(a, b) { return a + Math.random() * (b - a); }
 
       function makeParticle(depth) {
         return {
           text: GLYPHS[(Math.random() * GLYPHS.length) | 0],
-          x: Math.random() * W,
-          y: rand(H * 0.08, H * 0.66),
-          size: depth * 11 + rand(2, 9),
-          speed: depth * 18 + rand(6, 26),
-          alpha: depth * 0.28 + rand(0.05, 0.18),
+          x: Math.random() * (W + 200),
+          y: rand(H * 0.06, H * 0.68),
+          size: depth * 12 + rand(4, 9),
+          speed: depth * 20 + rand(8, 30),
+          alpha: depth * 0.26 + rand(0.05, 0.16),
           color: COLORS[(Math.random() * COLORS.length) | 0],
         };
       }
       const layers = [
-        { depth: 0.35, arr: [] },
-        { depth: 0.7, arr: [] },
-        { depth: 1.15, arr: [] },
+        { depth: 0.3, arr: [] },
+        { depth: 0.65, arr: [] },
+        { depth: 1.1, arr: [] },
       ];
       function seedParticles() {
         layers.forEach(l => {
-          const n = Math.round((l.depth === 1.15 ? 26 : 22));
           l.arr = [];
-          for (let i = 0; i < n; i++) l.arr.push(makeParticle(l.depth));
+          for (let i = 0; i < 18; i++) l.arr.push(makeParticle(l.depth));
         });
       }
       seedParticles();
@@ -152,61 +165,65 @@
         });
       }
 
-      // ---------- the little boy ----------
-      function drawBoy(phase, t) {
-        const groundY = H * 0.72;
-        const boyX = W * 0.40;
-        const scale = Math.max(0.75, Math.min(1.5, H / 640));
+      // ---------- boy state ----------
+      let sitting = false;
+      let sitAmount = 0;
+      let interacted = false;
 
-        const bob = Math.abs(Math.sin(phase)) * 2.4 * scale;
-        const swing = 0.55;
+      function getBoy() {
+        return {
+          boyX: W * 0.40,
+          groundY: H * 0.72,
+          scale: Math.max(0.75, Math.min(1.5, H / 640)),
+        };
+      }
 
-        // glow around the boy
-        const glow = ctx.createRadialGradient(boyX, groundY - 50 * scale, 10, boyX, groundY - 50 * scale, 150 * scale);
-        glow.addColorStop(0, 'rgba(251,191,36,0.14)');
-        glow.addColorStop(1, 'rgba(251,191,36,0)');
-        ctx.fillStyle = glow;
-        ctx.fillRect(boyX - 160 * scale, groundY - 200 * scale, 320 * scale, 240 * scale);
+      canvas.addEventListener('click', function (e) {
+        const rect = canvas.getBoundingClientRect();
+        const mx = e.clientX - rect.left;
+        const my = e.clientY - rect.top;
+        const { boyX, groundY, scale } = getBoy();
+        const cx = boyX;
+        const cy = groundY - 50 * scale;
+        if (Math.hypot(mx - cx, my - cy) < 95 * scale) {
+          sitting = !sitting;
+          interacted = true;
+        }
+      });
+
+      // ---------- walking pose (side view) ----------
+      function drawBoyWalking(phase, t, x, groundY, scale, sit) {
+        const damp = Math.max(0, 1 - sit * 2.2); // walk cycle damps while sitting down
+        const bob = Math.abs(Math.sin(phase)) * 2.4 * scale * damp;
+        const swing = 0.55 * damp;
 
         ctx.save();
-        ctx.translate(boyX, groundY - bob);
+        ctx.translate(x, groundY - bob);
         ctx.scale(scale, scale);
 
         // shadow
-        ctx.beginPath();
-        ctx.ellipse(0, 3, 20, 5, 0, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(0,0,0,0.35)';
-        ctx.fill();
+        ellipse(0, 3, 20, 5, 'rgba(0,0,0,0.35)');
 
         const hip = -36, shoulder = -64, headY = -80, headR = 15;
         const legLen = 36, armLen = 22;
 
-        // --- backpack (behind torso) ---
+        // backpack (behind torso)
         roundRect(-13, shoulder + 4, 12, 26, 5, '#38bdf8');
         roundRect(-15, shoulder + 6, 16, 20, 4, '#0ea5e9');
 
-        // --- legs ---
+        // legs
         const legA1 = swing * Math.sin(phase);
         const legA2 = swing * Math.sin(phase + Math.PI);
-        const fFar = limb(0, hip, legA1, legLen, '#24303f', 7.5);   // far leg (darker)
-        const fNear = limb(0, hip, legA2, legLen, '#334155', 7.5);  // near leg
+        const fFar = limb(0, hip, legA1, legLen, '#24303f', 7.5);
+        const fNear = limb(0, hip, legA2, legLen, '#334155', 7.5);
+        ellipse(fFar.x + 2, fFar.y + 1, 6, 3.2, '#f59e0b');
+        ellipse(fNear.x + 2, fNear.y + 1, 6, 3.2, '#f59e0b');
 
-        // shoes
-        function shoe(f, dx) {
-          ctx.beginPath();
-          ctx.ellipse(f.x + dx, f.y + 1, 6, 3.2, 0, 0, Math.PI * 2);
-          ctx.fillStyle = '#f59e0b';
-          ctx.fill();
-        }
-        shoe(fFar, 2);
-        shoe(fNear, 2);
-
-        // --- torso ---
+        // torso
         roundRect(-9, shoulder, 18, hip - shoulder + 2, 8, '#fbbf24');
-        // hoodie pocket / belt
         roundRect(-7, shoulder + 8, 14, 4, 2, '#f59e0b');
 
-        // --- arms ---
+        // arms
         const armA1 = -swing * 0.8 * Math.sin(phase + Math.PI);
         const armA2 = -swing * 0.8 * Math.sin(phase);
         const hFar = limb(0, shoulder + 4, armA2, armLen, '#eab308', 5.5);
@@ -214,36 +231,71 @@
         circle(hFar.x, hFar.y, 3, '#fcd7b6');
         circle(hNear.x, hNear.y, 3, '#fcd7b6');
 
-        // --- head ---
+        // head
         circle(0, headY, headR, '#fcd7b6');
-        // hair (cap on top-back)
         ctx.beginPath();
         ctx.arc(-1, headY - 1, headR + 1, Math.PI * 0.92, Math.PI * 1.86);
         ctx.fillStyle = '#5b3a29';
         ctx.fill();
-        // little hair fringe at front
         ctx.beginPath();
         ctx.arc(headR * 0.45, headY - headR * 0.72, 4.5, Math.PI * 0.6, Math.PI * 1.6);
         ctx.fillStyle = '#5b3a29';
         ctx.fill();
-        // eye (facing right)
         circle(headR * 0.46, headY - 1.5, 2.1, '#1f2937');
-        // smile
         ctx.beginPath();
         ctx.arc(headR * 0.42, headY + 3.5, 4.2, 0.15 * Math.PI, 0.9 * Math.PI);
         ctx.strokeStyle = '#c2703d';
         ctx.lineWidth = 1.8;
         ctx.lineCap = 'round';
         ctx.stroke();
-        // blush
         circle(headR * 0.28, headY + 4.5, 2.4, 'rgba(244,114,114,0.45)');
 
         ctx.restore();
       }
 
-      // ---------- background drawing ----------
+      // ---------- sitting pose (back view, facing away) ----------
+      function drawBoySitting(t, x, groundY, scale) {
+        const breathe = Math.sin(t / 850) * 1.5;
+        const gaze = Math.sin(t / 2100) * 2; // slow head sway while looking around
+
+        ctx.save();
+        ctx.translate(x, groundY);
+        ctx.scale(scale, scale);
+
+        // shadow (wider while seated)
+        ellipse(0, 3, 26, 6, 'rgba(0,0,0,0.35)');
+
+        // feet peeking out at the sides
+        ellipse(-12, 0, 6.5, 3.4, '#f59e0b');
+        ellipse(12, 0, 6.5, 3.4, '#f59e0b');
+
+        // torso (back view)
+        roundRect(-11, -40 - breathe, 22, 24, 10, '#fbbf24');
+
+        // backpack (on his back, facing the viewer)
+        roundRect(-13, -42 - breathe, 26, 20, 6, '#0ea5e9');
+        roundRect(-13, -42 - breathe, 26, 8, 6, '#0284c7'); // top pocket
+        // straps over shoulders
+        ctx.strokeStyle = '#0369a1';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(-6, -40 - breathe);
+        ctx.lineTo(-7, -26 - breathe);
+        ctx.moveTo(6, -40 - breathe);
+        ctx.lineTo(7, -26 - breathe);
+        ctx.stroke();
+
+        // head (back view = hair) with a gentle sway
+        circle(gaze, -54 - breathe, 14, '#5b3a29');
+        // ears
+        circle(gaze - 13, -55 - breathe, 3.4, '#fcd7b6');
+        circle(gaze + 13, -55 - breathe, 3.4, '#fcd7b6');
+
+        ctx.restore();
+      }
+
+      // ---------- background ----------
       function drawBackground(scroll) {
-        // sky gradient
         const g = ctx.createLinearGradient(0, 0, 0, H);
         g.addColorStop(0, '#0a0c12');
         g.addColorStop(0.55, '#0d1120');
@@ -254,9 +306,10 @@
         // far grid dots
         ctx.fillStyle = 'rgba(96,165,250,0.10)';
         const gap = 46;
+        const span = W + gap * 2;
         for (let gx = -gap; gx < W + gap; gx += gap) {
           for (let gy = H * 0.06; gy < H * 0.66; gy += gap) {
-            const x = ((gx - scroll * 0.12) % (W + gap * 2) + (W + gap * 2)) % (W + gap * 2) - gap;
+            const x = ((gx - scroll * 0.12) % span + span) % span - gap;
             ctx.fillRect(x, gy, 1.6, 1.6);
           }
         }
@@ -281,10 +334,11 @@
       function drawParticles(scroll) {
         layers.forEach(l => {
           l.arr.forEach(p => {
-            const x = ((p.x - scroll * p.speed * 0.02) % (W + 80) + (W + 80)) % (W + 80) - 40;
+            const span = W + 260;
+            const x = ((p.x - scroll * p.speed * 0.02) % span + span) % span - 130;
             ctx.globalAlpha = p.alpha;
             ctx.fillStyle = p.color;
-            ctx.font = (p.size + 'px ui-monospace, Menlo, Consolas, monospace');
+            ctx.font = p.size + 'px ui-monospace, Menlo, Consolas, monospace';
             ctx.fillText(p.text, x, p.y);
           });
         });
@@ -293,14 +347,12 @@
 
       function drawGround(scroll) {
         const groundY = H * 0.72;
-        // floor fill
         const fg = ctx.createLinearGradient(0, groundY, 0, H);
         fg.addColorStop(0, 'rgba(34,211,238,0.06)');
         fg.addColorStop(1, 'rgba(34,211,238,0)');
         ctx.fillStyle = fg;
         ctx.fillRect(0, groundY, W, H - groundY);
 
-        // glowing path line
         ctx.strokeStyle = 'rgba(96,165,250,0.55)';
         ctx.lineWidth = 1.6;
         ctx.beginPath();
@@ -314,7 +366,6 @@
         ctx.lineTo(W, groundY + 3);
         ctx.stroke();
 
-        // scrolling binary on the road
         ctx.font = '12px ui-monospace, Menlo, Consolas, monospace';
         const spacing = 26;
         const offset = (scroll * 2.2) % spacing;
@@ -325,6 +376,17 @@
         }
       }
 
+      function drawHint() {
+        if (interacted) return;
+        const { boyX, groundY } = getBoy();
+        const pulse = 0.5 + 0.5 * Math.sin(performance.now() / 420);
+        ctx.font = '13px ui-monospace, Menlo, Consolas, monospace';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = 'rgba(124,134,152,' + (0.45 + pulse * 0.4).toFixed(3) + ')';
+        ctx.fillText('· click the little explorer ·', boyX, groundY + 56);
+        ctx.textAlign = 'left';
+      }
+
       // ---------- main loop ----------
       let scroll = 0;
       let last = performance.now();
@@ -332,13 +394,31 @@
         const dt = Math.min(now - last, 50);
         last = now;
         scroll += dt * 0.03;
-        const phase = now / 260; // walk cycle
+        const phase = now / 260;
+
+        // ease sitting state
+        const target = sitting ? 1 : 0;
+        sitAmount += (target - sitAmount) * 0.12;
 
         ctx.clearRect(0, 0, W, H);
         drawBackground(scroll);
         drawParticles(scroll);
         drawGround(scroll);
-        drawBoy(phase, now);
+
+        // glow around the boy
+        const { boyX, groundY, scale } = getBoy();
+        const glow = ctx.createRadialGradient(boyX, groundY - 48 * scale, 10, boyX, groundY - 48 * scale, 150 * scale);
+        glow.addColorStop(0, 'rgba(251,191,36,0.13)');
+        glow.addColorStop(1, 'rgba(251,191,36,0)');
+        ctx.fillStyle = glow;
+        ctx.fillRect(boyX - 160 * scale, groundY - 200 * scale, 320 * scale, 240 * scale);
+
+        if (sitAmount < 0.5) {
+          drawBoyWalking(phase, now, boyX, groundY, scale, sitAmount);
+        } else {
+          drawBoySitting(now, boyX, groundY, scale);
+        }
+        drawHint();
 
         requestAnimationFrame(frame);
       }
