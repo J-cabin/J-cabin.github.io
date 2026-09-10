@@ -47,7 +47,7 @@
       transition: color .2s ease;
     }
     .nav-links a:hover { color: var(--text); }
-    canvas { position: fixed; inset: 0; display: block; cursor: pointer; }
+    canvas { position: fixed; inset: 0; display: block; }
 </style>
 </head>
 <body>
@@ -115,23 +115,6 @@
         ctx.stroke();
         return { x: ex, y: ey };
       }
-      function drawStar(x, y, r, rot, color) {
-        ctx.save();
-        ctx.translate(x, y);
-        ctx.rotate(rot);
-        ctx.beginPath();
-        for (let i = 0; i < 10; i++) {
-          const ang = -Math.PI / 2 + i * Math.PI / 5;
-          const rad = i % 2 === 0 ? r : r * 0.5;
-          const px = Math.cos(ang) * rad;
-          const py = Math.sin(ang) * rad;
-          if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
-        }
-        ctx.closePath();
-        ctx.fillStyle = color;
-        ctx.fill();
-        ctx.restore();
-      }
       function rand(a, b) { return a + Math.random() * (b - a); }
 
       // ---------- AI + EDA terms ----------
@@ -181,13 +164,6 @@
         });
       }
 
-      // ---------- luck system ----------
-      let luckCount = 0;
-      let luckItems = [];   // falling lucky stars
-      let sparks = [];      // impact sparkles
-      let bonk = 0;         // head-bonk on impact (0..1)
-      let interacted = false;
-
       function getBoy() {
         return {
           boyX: W * 0.40,
@@ -196,24 +172,8 @@
         };
       }
 
-      canvas.addEventListener('click', function (e) {
-        const { boyX, scale } = getBoy();
-        // spawn a lucky star above the boy's head; faster clicking = more stars = faster luck
-        luckItems.push({
-          x: boyX + rand(-26, 26) * scale,
-          y: -30,
-          vy: rand(4.5, 7.5),
-          size: rand(9, 14) * scale,
-          rot: rand(0, Math.PI * 2),
-          seed: rand(0, Math.PI * 2),
-          hit: false,
-          life: 0,
-        });
-        interacted = true;
-      });
-
       // ---------- walking boy ----------
-      function drawBoyWalking(phase, t, x, groundY, scale, bonk) {
+      function drawBoyWalking(phase, x, groundY, scale) {
         const bob = Math.abs(Math.sin(phase)) * 2.4 * scale;
         const swing = 0.55;
 
@@ -224,8 +184,7 @@
         // shadow
         ellipse(0, 3, 20, 5, 'rgba(0,0,0,0.35)');
 
-        const hip = -36, shoulder = -64, headR = 15;
-        const headY = -80 + bonk * 6;   // head dips when bonked
+        const hip = -36, shoulder = -64, headY = -80, headR = 15;
         const legLen = 36, armLen = 22;
 
         // backpack (behind torso)
@@ -351,96 +310,6 @@
         }
       }
 
-      // ---------- luck rendering ----------
-      function updateLuck() {
-        const { groundY, scale } = getBoy();
-        const headY = groundY - 78 * scale;
-
-        const dead = [];
-        luckItems.forEach(it => {
-          if (!it.hit) {
-            it.y += it.vy;
-            it.rot += 0.07;
-            it.x += Math.sin(it.y * 0.05 + it.seed) * 0.6;
-            if (it.y >= headY) {
-              it.hit = true;
-              it.life = 20;
-              luckCount += 1;
-              bonk = 1;
-              for (let k = 0; k < 9; k++) {
-                const a = rand(0, Math.PI * 2);
-                const sp = rand(1, 4.2);
-                sparks.push({
-                  x: it.x, y: headY,
-                  vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 1.2,
-                  life: 20, color: '#fde047',
-                });
-              }
-            }
-          } else {
-            it.life -= 1;
-          }
-          if (it.life <= 0) dead.push(it);
-        });
-        luckItems = luckItems.filter(it => dead.indexOf(it) === -1);
-
-        sparks.forEach(s => { s.x += s.vx; s.y += s.vy; s.vy += 0.12; s.life -= 1; });
-        sparks = sparks.filter(s => s.life > 0);
-
-        bonk *= 0.90;
-      }
-
-      function drawLuck() {
-        const { groundY, scale } = getBoy();
-        const headY = groundY - 78 * scale;
-
-        luckItems.forEach(it => {
-          if (!it.hit) {
-            const g = ctx.createRadialGradient(it.x, it.y, 2, it.x, it.y, it.size * 2.4);
-            g.addColorStop(0, 'rgba(253,224,71,0.55)');
-            g.addColorStop(1, 'rgba(253,224,71,0)');
-            ctx.fillStyle = g;
-            ctx.fillRect(it.x - it.size * 2.4, it.y - it.size * 2.4, it.size * 4.8, it.size * 4.8);
-            drawStar(it.x, it.y, it.size, it.rot, '#fde047');
-          } else {
-            // expanding burst ring
-            const p = 1 - it.life / 20;
-            ctx.globalAlpha = it.life / 20;
-            ctx.strokeStyle = '#fde047';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.arc(it.x, headY, p * 28, 0, Math.PI * 2);
-            ctx.stroke();
-            ctx.globalAlpha = 1;
-          }
-        });
-
-        sparks.forEach(s => {
-          ctx.globalAlpha = Math.max(0, s.life / 20);
-          circle(s.x, s.y, 2.2, s.color);
-        });
-        ctx.globalAlpha = 1;
-      }
-
-      function drawLuckCounter() {
-        ctx.font = '15px ui-monospace, Menlo, Consolas, monospace';
-        ctx.textAlign = 'center';
-        ctx.fillStyle = 'rgba(253,224,71,0.95)';
-        ctx.fillText('★ 幸运值 ' + luckCount, W / 2, 58);
-        ctx.textAlign = 'left';
-      }
-
-      function drawHint() {
-        if (interacted) return;
-        const { boyX, groundY } = getBoy();
-        const pulse = 0.5 + 0.5 * Math.sin(performance.now() / 420);
-        ctx.font = '13px ui-monospace, Menlo, Consolas, monospace';
-        ctx.textAlign = 'center';
-        ctx.fillStyle = 'rgba(124,134,152,' + (0.45 + pulse * 0.4).toFixed(3) + ')';
-        ctx.fillText('· click to drop luck ·', boyX, groundY + 56);
-        ctx.textAlign = 'left';
-      }
-
       // ---------- main loop ----------
       let scroll = 0;
       let last = performance.now();
@@ -449,8 +318,6 @@
         last = now;
         scroll += dt * 0.03;
         const phase = now / 260;
-
-        updateLuck();
 
         ctx.clearRect(0, 0, W, H);
         drawBackground(scroll);
@@ -464,10 +331,7 @@
         ctx.fillStyle = glow;
         ctx.fillRect(boyX - 160 * scale, groundY - 200 * scale, 320 * scale, 240 * scale);
 
-        drawBoyWalking(phase, now, boyX, groundY, scale, bonk);
-        drawLuck();
-        drawLuckCounter();
-        drawHint();
+        drawBoyWalking(phase, boyX, groundY, scale);
 
         requestAnimationFrame(frame);
       }
