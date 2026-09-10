@@ -1,0 +1,483 @@
+
+<!DOCTYPE html>
+<!--
+    Plain-Academic by Vasilios Mavroudis
+    Released under the  Simplified BSD License/FreeBSD (2-clause) License.
+    https://github.com/mavroudisv/plain-academic
+-->
+
+<html lang="en">
+<head>
+    <title>Jiawei Liu</title>
+    <link rel="icon" type="image/x-icon" href="/images/logo2.ico">
+    <meta charset="utf-8">
+    <meta name="author" content="Jiawei Liu">
+    <meta name="description" content="Personal website of Jiawei Liu">
+    <meta name="keywords" content="AI for EDA, Jiawei Liu">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--    Original dependency-->
+    <!--  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
+    <!--  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">-->
+    <!--  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>-->
+    <!--    Added by ChatGPT-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!--    Added by ChatGPT-->
+    <link href='https://fonts.googleapis.com/css?family=Oswald:700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.3.2/css/flag-icons.min.css">
+</head>
+<body>
+
+<style>
+.heading {
+    word-wrap: break-word;
+    font-family: 'Oswald', sans-serif;
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .info-text {
+    margin-bottom: 10px;
+  }
+
+  .university-color {
+    color: #990000;
+  }
+
+  .link-list a {
+    margin-right: 5px;
+  }
+
+  /* ====== 新增：只做布局与间距，不改颜色/风格 ====== */
+  .top-section {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  /* 让上半部分左右两栏更舒服一些 */
+  .top-left, .top-right {
+    padding-top: 5px;
+  }
+
+  .top-right ul{
+    padding-left:20px;   /* 控制整体缩进 */
+    margin-left:0;
+}
+
+.top-right > ul{
+    padding-left:0;   /* 第一层更贴左 */
+}
+
+.top-section{
+    margin-left:-5px;
+    margin-right:-5px;
+}
+
+.top-section [class*="col-"]{
+    padding-left:5px;
+    padding-right:5px;
+}
+
+  /* 左侧头像与文字的间距更规整 */
+  .profile-img{
+      width: 130px;      /* 想多小就改这里 */
+      max-width: 100%;
+      height: auto;
+    }
+
+  /* 右侧 Research Interest 区域与标题的间距 */
+  .top-right h3 {
+    margin-top: 0;
+  }
+
+  /* 下面所有内容统一单栏：清除浮动并给一点呼吸感 */
+  .single-col {
+    clear: both;
+    padding-top: 10px;
+  }
+
+  /* 让 col（你原本用的 class="col"）在 Bootstrap 3 下表现一致 */
+  .col {
+    width: 100%;
+  }
+</style>
+
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">Jiawei Liu</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="navbar-collapse">
+      <ul class="nav navbar-nav">
+        <!-- <li><a href="index.html">Home</a></li> -->
+        <!-- <li><a href="#education">Education</a></li> -->
+        <!-- <li><a href="#experiences">Experiences</a></li> -->
+        <li><a href="/">Home</a></li>
+        <li><a href="#publications">Publications</a></li>
+        <li><a href="/agenticeda/">AgenticEDA Survey</a></li>
+        <!-- <li><a href="#awards">Awards</a></li> -->
+        <!-- <li><a href="#services">Services</a></li> -->
+        <!-- <li><a href="#calendar">Calendar</a></li> -->
+        <!-- <li><a href="#group">AI4EDA Group</a></li> -->
+        <li><a href="/files/jiawei-CV.pdf">CV (Version: 2025.9)</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+<!--It is possible to have multiple pages  https://souravchatterjee.su.domains//index.html -->
+  <!-- Page Content -->
+   <div class="container">
+
+  <!-- ===== 顶部：两栏（左基本信息+照片；右Research Interest）===== -->
+  <div class="row top-section">
+
+    <!-- 左栏：照片 -->
+    <div class="col-md-2 col-sm-3 col-xs-12 top-left">
+      <img class="img-responsive profile-img" src="/images/avatar.jpg" alt="Avatar of Jiawei Liu">
+    </div>
+
+    <!-- 右栏：基本信息 -->
+    <div class="col-md-10 col-sm-9 col-xs-12 top-right">
+      <div class="heading">Jiawei Liu (刘佳玮)</div>
+      <div class="info-text" style="margin-top:10px">
+        Ph.D., Postdoctoral Fellow<br>
+        <a href="https://www.cse.cuhk.edu.hk/">Department of Computer Science and Engineering</a><br>
+        <a href="https://www.cuhk.edu.hk/english/index.html">Chinese University of Hong Kong (CUHK)</a><br>
+        Supervised by Prof. <a href="https://www.cse.cuhk.edu.hk/~byu/">Bei Yu</a><br>
+        Email: <a href="mailto:liujw@cse.cuhk.edu.hk">liujw@cse.cuhk.edu.hk</a><br>
+      </div>
+
+      <div class="link-list">
+        <a href="https://scholar.google.com/citations?user=ufius3MAAAAJ">Google Scholar</a> |
+        <a href="https://orcid.org/0000-0003-2437-0455">ORCID</a> |
+        <a href="https://dblp.org/pid/12/8228-6.html">DBLP</a> |
+        <a href="https://www.semanticscholar.org/author/Jiawei-Liu/2260178816">Semantic Scholar</a> |
+        <a href="https://github.com/J-cabin">GitHub</a>
+      </div>
+    </div>
+
+  </div>
+
+  <hr>
+  <div class="single-col">
+      <div class="col">
+          <h2 id="bio">Short Bio</h2>
+          Jiawei Liu is a postdoctoral researcher at the Department of Computer Science and Engineering, Chinese University of Hong Kong. He received the Ph.D. degree from BUPT in 2025 and the B.Eng. degree from BUPT in 2020. His current research interests include electronic design automation and artificial intelligence. 
+          He has received two Best Paper Award Nomination (GLSVLSI'25, DATE'26) in top conferences. 
+      </div>
+      <div class="col">
+          <h2 id="interest">Research Interest</h2>
+        <li>
+          <strong>Electronic Automation Design (EDA):</strong>
+          <ul class="vert">
+               <!-- (e.g., Register-Transfer Level Netlist, Gate-Level Netlist, Analog/Mixed-Signal Netlist, Layout, Power-Grid, etc.) -->
+            <li>Circuit Modelling and Representation Learning: [ISEDA'24, GLSVLSI'24, ICCAD'24, DATE'25a, DATE'25b, DAC'25, ISEDA'25, GLSVLSI'25 BPA Nomination, ICCAD'25, ICLR'26, CVPR'26, DAC'26, TODAES'26, ICCAD'26a, ICCAD'26b]
+            </li>
+            <!-- <li>EDA for Digital IC Design:
+            </li> -->
+            <!-- <li>EDA for AMS IC Design:
+              <ul class="vert">
+                <li><strong>Circuit Representation Learning:</strong> [ICCAD'25]</li>
+              </ul>
+            </li> -->
+            <li>Agentic EDA: [DATE'26 BPA Nomination]
+            </li>
+            <li>3D IC: [ASPDAC'27]
+            </li>
+          </ul>
+        </li>
+        <li>
+          <strong>Artificial Intelligence (AI):</strong>
+          <ul class="vert">
+            <!-- <li>Embodied AI:
+            </li> -->
+            <li>Multimodal LLMs: [TPAMI'25]
+            </li>
+            <li>Trustworthy AI: [IJCAI'20, WWW'21, WSDM'23, SDM'23, WWW'24]
+            </li>
+          </ul>
+        </li>
+      </div>
+
+    <h2 id="services">Professional Services</h2>
+              <h4>Judge</h4>
+              <li>EDA Elite Challenge 2025</li>
+              <h4>Reviewer for top journals</h4>
+              <li>IEEE Transactions on Pattern Analysis and Machine Intelligence (TPAMI)</li>
+              <li>IEEE Transactions on Dependable and Secure Computing (TDSC)</li>
+              <li>ACM Transactions on Design Automation of Electronic Systems (TODAES)</li>
+              <li>ACM Transactions on Reconfigurable Technology and Systems (TRETS)</li>
+              <li>Transactions on Machine Learning Research (TMLR)</li>
+              <h4>Senior PC Member for top conferences</h4>
+              <li>ACM International Conference on Information and Knowledge Management (CIKM)</li>
+              <h4>PC Member/Reviewer for top conferences</h4> 
+              <li>International Conference on Machine Learning (ICML)</li>
+              <li>International Conference on Learning Representations (ICLR)</li>
+              <li>Conference on Neural Information Processing Systems (NeurIPS)</li>
+              <li>AAAI Conference on Artificial Intelligence (AAAI)</li>
+              <li>IEEE/CVF Computer Vision and Pattern Recognition Conference (CVPR)</li>
+              <li>ACL Rolling Review (ARR)</li>
+              <li>ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD)</li>
+              <li>The Web Conference (WWW)</li>
+              <li>European Conference on Computer Vision (ECCV)</li>
+              <li>Asia and South Pacific Design Automation Conference (ASP-DAC)</li>
+              <li>International Conference on Field-Programmable Logic and Applications (FPL)</li>
+              <h4>Session Chair</h4>
+              <li>KDD 2025</li>
+              <!-- <li>Session Chair: KDD (2025).</li> -->
+              <!-- <li>Editor: <a href="https://mp.weixin.qq.com/s/xqux5vhN--oikofIJRaLPg">GAMMA Lab WeChat Official Account</a> (2020-2023).</li> -->
+              <!-- </ul> -->
+              <!-- <h3>Talks</h3> -->
+              <!-- <ul> -->
+              <!-- <li><a href="files/neural-algorithmic-reasoning.pdf">An Introduction to Neural Algorithmic Reasoning</a>, 2023.7.  -->
+              <!-- </ul> -->
+
+            </div>
+                
+            <div class="col">
+              <h2 id="awards">Selected Awards</h2>
+              <!-- <h3>In the postdoctoral phase</h3>
+              <li>To be added</li>
+              <h3>In the doctoral phase</h3> -->
+              <li>Gold Reviewer (Top 25%), ICML, 2026.</li>
+              <li><b><font color=red>Best Paper Award Nomination</font></b>, DATE, 2026.</li>
+              <li><b><font color=red>Best Paper Award Nomination</font></b>, GLSVLSI, 2025.</li>
+              <!-- <li>Best Paper Award Nomination (6 out of 154), GLSVLSI, 2025, 2025.6</li> -->
+              <li>Outstanding Reviewer (Top 10%), KDD, 2025.</li>
+              <!-- <li>2024年北邮GAMMA Lab卓越贡献奖、服务优秀奖, 2025.1</li>
+              <li>2024年中国研究生创“芯”大赛·EDA精英挑战赛总决赛学术进取奖, 2024.12</li>
+              <li>2023年北邮GAMMA Lab服务卓越奖、项目优秀奖、学术优秀奖, 2024.1</li> -->
+              <li>1st Prize, EDA Elite Challenge, 2023.</li>
+              <!-- <li><font color=red>第五届集成电路EDA设计精英挑战赛总决赛一等奖</font>, 2023.12</li> -->
+              <!-- <li>2022年北邮GAMMA Lab项目卓越奖、服务优秀奖、学术贡献奖, 2023.1</li>
+              <li>北京邮电大学计算机学院优秀研究生, 2021.12</li>
+              <li>2021年北邮GAMMA Lab服务优秀奖、学术优秀奖, 2021.12</li>
+              <li>北京邮电大学计算机学院"助顺邮我"科技扶贫团队重要贡献个人, 2021.3</li>
+              <li>2020年北邮GAMMA Lab服务优秀奖、学术贡献奖, 2020.12</li> -->
+              <!-- <h3>In the undergraduate stage</h3> -->
+              <li>Outstanding Graduate of Beijing, 2020.</li>
+              <!-- <li><strong>北京市优秀毕业生</strong>、北京邮电大学优秀毕业生, 2020.6</li>
+              <li>2019年北邮DMGroup服务贡献奖、学术贡献奖, 2020.1</li>
+              <li>2018-2019学年北京邮电大学校级三好学生、优秀团员, 2019.12</li>
+              <li>美国大学生数学建模竞赛H奖, 2019.4</li>
+              <li>2019年北京邮电大学寒假大学生回母校宣传活动优秀个人, 2019.4</li>
+              <li>2017-2018学年北京邮电大学校级三好学生、优秀团员, 2018.12</li> -->
+              <!-- <li>National Second Prize, CUMCM, 2018.10</li> -->
+              <!-- <li>全国大学生数学建模竞赛全国二等奖, 2018.10</li>
+              <li>2018高校校园大数据竞赛优胜奖, 2018.6</li>
+              <li>北京邮电大学程序设计竞赛银奖, 2018.4</li>
+              <li>2016-2017学年北京邮电大学校级三好学生、优秀团员, 2017.12</li>
+              <li>河北省大学生程序设计竞赛一等奖, 2017.10</li> -->
+            </div>
+            
+            <div class="col" style="margin-top:3%; text-align:left;">
+              <h2 id="publications">Publications</h2>
+              Note: <sup>&dagger;</sup>Equal contribution; <sup>&spades;</sup>Corresponding author
+              <h4>Summary</h4>
+              <li>
+                EDA Journals / Conferences: TODAES (<b>1</b>), DAC (<b>2</b>), ICCAD (<b>4</b>), DATE (<b>3</b>), ASPDAC (<b>1</b>), etc.<br>
+              </li>
+              <li>
+                AI Journals / Conferences: TPAMI (<b>1</b>), ICLR(<b>1</b>), CVPR(<b>1</b>), WWW (<b>2</b>), IJCAI (<b>1</b>), etc.<br>
+              </li>
+                <!-- Brazil, Canada, China, France, Germany, Italy, Japan, Singapore, Slovenia, United States -->
+              <li>
+                Presentation Locations (Sorted Alphabetically):
+                <span class="fi fi-br"></span>
+                <span class="fi fi-ca"></span>
+                <span class="fi fi-cn"></span>
+                <span class="fi fi-fr"></span>
+                <span class="fi fi-de"></span>
+                <span class="fi fi-it"></span>
+                <span class="fi fi-jp"></span>
+                <span class="fi fi-sg"></span>
+                <span class="fi fi-si"></span>
+                <span class="fi fi-us"></span>
+              </li>
+              <h3>Journal & Conference Papers</h3>
+              <h4 id="preprints--working-papers">Selected Preprints</h4>
+              <li>[P6] Fangzhou Liu, Peiyi Han, <b>Jiawei Liu</b>, Yuan Pu, Zhuolun He, Rongliang Fu, Tsung-Yi Ho, Bei Yu, &ldquo;SynAct: A Reasoning-Acting Large Language Model Agent for Adaptive Synthesis Optimization&rdquo;.
+              </li>
+              <li>[P5] Jiarui Tan, Zhongjian Zhang, Yabo Guo, <b>Jiawei Liu</b>, Yujie Xing, Muhan Zhang, Cheng Yang, Chuan Shi, &ldquo;GABench: A Comprehensive Benchmark for Evaluating LLM Agents on Graph Analysis Tasks&rdquo;.
+              </li>
+              <li>[P4] <b>Jiawei Liu</b>, Peiyi Han, Yuntao Lu, Su Zheng, Fengyu Yan, Bei Yu, &ldquo;Agentic Electronic Design Automation: A Handoff Perspective&rdquo;. [<a href="/agenticeda/" target="_blank">Project Page</a>]
+              </li>
+              <li>[P3] <b>Jiawei Liu</b>, Senqiao Yang, Mingjun Wang, Yu Wang, Bei Yu, &ldquo;Graph World Models: Concepts, Taxonomy, and Future Directions&rdquo;.
+              </li>
+              <li>[P2] Xinyan Zhu, Cheng Yang, Qiuyu Wang, Zeyuan Guo, Zedi Liu, Yiding Wang, <b>Jiawei Liu</b>, Chunchen Wang, Muhan Zhang, Chuan Shi, &ldquo;Are Graphs Useful for LLMs? A Comprehensive Survey of Graph-Enhanced Large Language Models&rdquo;.
+              </li>
+              <li>[P1] Bin Wu, Yihang Wang, Yuanhao Zeng, <b>Jiawei Liu</b>, Jiashu Zhao, Cheng Yang, Yawen Li, Long Xia, Dawei Yin, Chuan Shi, &ldquo;Graph Foundation Models for Recommendation: A Comprehensive Survey&rdquo;.
+              </li>
+              <h4>Accepted</h4>
+              <li>[J8] <b>Jiawei Liu</b>, Jianwang Zhai, Xun He, Mingyu Zhao, Zhe Lin, Chuan Shi, Bei Yu, &ldquo;PolarGate: Breaking the Functionality Representation Bottleneck of And-Inverter Graph Neural Network&rdquo;, accepted by Transactions on Design Automation of Electronic Systems (<b>TODAES</b>).
+              </li>
+              <h4>2027</h4>
+              <li>[C21] Fangzhou Liu, Yuhao Ji, Lancheng Zou, <b>Jiawei Liu</b>, Mingjun Wang, Gengjie Chen, Guannan Guo, Bei Yu, &ldquo;Logic Resynthesis for Cross-Die Dependencies in Hybrid Bonded 3D ICs&rdquo;, IEEE/ACM Asian and South Pacific Design Automation Conference (<b>ASPDAC</b>), Tokyo, Jan. 25–28, 2027.
+              </li>  
+              <h4>2026</h4>
+              <li>[C20] Jiajun Zou, <b>Jiawei Liu</b>, Ao Liu, Junnong Tian, Yibin Zhang, Chengjie Liu, Yuxi Wang, Shan Shen, Wenhua Gu, Jun Yang, Wenjian Yu, &ldquo;ParasGB: A Graph Benchmark Suite for Parasitic Estimation on AMS Circuits&rdquo;, IEEE/ACM International Conference on Computer-Aided Design (<b>ICCAD</b>), California, USA, Nov. 8-12, 2026.
+              </li>
+              <li>[C19] Zhiyan Liu, <b>Jiawei Liu</b>, Jianwang Zhai, Chuan Shi, &ldquo;AxialNet: Orthogonally Decoupled Layout Learning with Manhattan Bias for Routability Prediction&rdquo;, IEEE/ACM International Conference on Computer-Aided Design (<b>ICCAD</b>), California, USA, Nov. 8-12, 2026.
+              </li>
+              <li>[C18] Feng Guo, Yueyue Xi, Jingyu Jia, <b>Jiawei Liu</b>, Tianshu Hou, Yuyang Ye, Jianwang Zhai, Kang Zhao, Chuan Shi, &ldquo;GEMIR: Graph-Based Joint Modeling of Electromigration and IR Drop for Power Grid&rdquo;, ACM/IEEE Design Automation Conference (<b>DAC</b>), Long Beach, Jul. 26–29, 2026.
+              </li>
+              <li>[C17] Zewei Zhou, Jiajun Zou, Jiajia Zhang, Ao Yang, Ruichao He, Haozheng Zhou, Ao Liu, <b>Jiawei Liu</b>, Leilei Jin, Shan Shen, Daying Sun, &ldquo;R2G: A Multi-View Circuit Graph Benchmark Suite from RTL to GDSII&rdquo;, IEEE/CVF Conference on Computer Vision and Pattern Recognition (<b>CVPR</b>), Denver, June 3–7, 2026.
+              </li>
+              <li>[C16] Mingyu Zhao, Xun He, <b>Jiawei Liu</b>, Jianwang Zhai, Chuan Shi, &ldquo;Topology matters in RTL Circuit Representation Learning&rdquo;, International Conference on Learning Representations (<b>ICLR</b>), Rio de Janeiro, Brazil, Apr. 23–27, 2026.
+              </li>
+              <li>[C15] Zhaohai Di, Jindong Tu, Zhiyuan HE, Yuan Pu, <b>Jiawei Liu</b>, Chong Tong, Tsung-Yi Ho, Bei Yu, Tinghuan Chen, &ldquo;Smart-PCLib: A LLM-based Multi-Agent Framework for Automated PCB Component Library Generation&rdquo;, IEEE/ACM Proceedings Design, Automation and Test in Europe (<b>DATE</b>), Verona, Italy, Apr. 20–22, 2026. <b><font color=red>(Best Paper Award Nomination)</font></b>
+              </li>
+              <h4>2025</h4>
+              <li>[C14] Shan Shen, Shenglu Hua, Jiajun Zou, <b>Jiawei Liu</b>, Jianwang Zhai, Chuan Shi, Wenjian Yu, &ldquo;Transferable Parasitic Estimation via Graph Contrastive Learning and Label Rebalancing in AMS Circuits&rdquo;, IEEE/ACM International Conference on Computer-Aided Design (<b>ICCAD</b>), Munich, Germany, Oct. 26-30, 2025.
+              </li>
+              <li>[C13] Mingyu Zhao, <b>Jiawei Liu</b>, Jianwang Zhai, Chuan Shi, &ldquo;MILS: Modality Interaction Driven Learning for Logic Synthesis&rdquo;, ACM Great Lakes Symposium on VLSI (<b>GLSVLSI</b>), New Orleans, USA, Jun. 30–July 2, 2025. <b><font color=red>(Best Paper Award Nomination)</font></b>
+              </li>
+              <li>[C12] Zhengyuan Shi, Zeju Li, Chengyu Ma, Yunhao Zhou, Ziyang Zheng, <b>Jiawei Liu</b>, Hongyang Pan, Lingfeng Zhou, Kezhi Li, Jiaying Zhu, Lingwei Yan, Zhiqiang He, Chenhao Xue, Wentao Jiang, Fan Yang, Guangyu Sun, Xiaoyan Yang, Gang Chen, Chuan Shi, Zhufei Chu, Jun Yang, Qiang Xu, &ldquo;ForgeEDA: A Comprehensive Multimodal Dataset for Advancing EDA&rdquo;, International Symposium of Electronics Design Automation (<b>ISEDA</b>), Hong Kong, China, May. 9–12, 2025. <a href="https://zeju.gitbook.io/lcm-team/forgeeda/editor"><i class="fa fa-github" style="font-size:18px"></i></a>
+              </li>
+              <li>[J7] <b>Jiawei Liu</b><sup>&dagger;</sup>, Cheng Yang<sup>&dagger;</sup>, Zhiyuan Lu, Junze Chen, Yibo Li, Mengmei Zhang, Ting Bai, Yuan Fang, Lichao Sun, Philip S. Yu, Chuan Shi, &ldquo;Graph Foundation Models: Concepts, Opportunities and Challenges&rdquo;, IEEE Transactions on Pattern Analysis and Machine Intelligence (<b>TPAMI</b>), 2025.
+                  <a href="https://github.com/BUPT-GAMMA/GFMPapers"><i class="fa fa-github" style="font-size:18px"></i></a>
+              </li>
+              <li>[C11] Feng Guo, Yueyue Xi, Jianwang Zhai, Jingyu Jia, <b>Jiawei Liu</b>, Kang Zhao, Chuan Shi, &ldquo;IRGNN: A Graph-based Framework Integrating Numerical Solution and Point Cloud for Static IR Drop Prediction&rdquo;, ACM/IEEE Design Automation Conference (<b>DAC</b>), San Francisco, Jun. 22–25, 2025.
+              </li>
+              <li>[C10] <b>Jiawei Liu</b>, Zhiyan Liu, Xun He, Jianwang Zhai, Zhengyuan Shi, Qiang Xu, Bei Yu, Chuan Shi, &ldquo;WideGate: Beyond Directed Acyclic Graph Learning in Subcircuit Boundary Prediction&rdquo;, IEEE/ACM Proceedings Design, Automation and Test in Europe (<b>DATE</b>), Lyon, France, Mar. 31–Apr. 02, 2025.
+              </li>
+              <li>[C9] Feng Guo, Jianwang Zhai, Jingyu Jia, <b>Jiawei Liu</b>, Kang Zhao, Bei Yu, Chuan Shi, &ldquo;IR-Fusion: A Fusion Framework for Static IR Drop Analysis Combining Mathematical Solutions and Machine Learning&rdquo;, IEEE/ACM Proceedings Design, Automation and Test in Europe (<b>DATE</b>), Lyon, France, Mar. 31–Apr. 02, 2025.
+              </li>
+              <li>[J6] <b>Jiawei Liu</b>, Wenyi Xiao, Hongtao Cheng, Chuan Shi, &ldquo;Graph Neural Network based Time Estimator for SAT Solver&rdquo;, International Journal of Machine Learning and Cybernetics (<b>IJMLC</b>), 2025.
+              </li>
+              <h4>2024</h4>
+              <li>[C8] <b>Jiawei Liu</b>, Jianwang Zhai, Mingyu Zhao, Zhe Lin, Bei Yu, Chuan Shi, &ldquo;PolarGate: Breaking the Functionality Representation Bottleneck of And-Inverter Graph Neural Network&rdquo;, IEEE/ACM International Conference on Computer-Aided Design (<b>ICCAD</b>), New Jersey, Oct. 27–31, 2024.
+                  <a href="https://github.com/BUPT-GAMMA/PolarGate"><i class="fa fa-github" style="font-size:18px"></i></a>
+              </li>
+              <li>[C7] Feng Guo<sup>&dagger;</sup>, <b>Jiawei Liu</b><sup>&dagger;</sup>, Jianwang Zhai, Jingyu Jia, Kang Zhao, Chuan Shi, &ldquo;PGAU: Static IR Drop Analysis for Power Grid using Attention U-Net Architecture and Label Distribution Smoothing&rdquo;, ACM Great Lakes Symposium on VLSI (<b>GLSVLSI</b>), Tampa Bay Area, FL, June 12–14, 2024.
+              </li>
+              <li>[C6] Hongtao Cheng<sup>&dagger;</sup>, <b>Jiawei Liu</b><sup>&dagger;</sup>, Jianwang Zhai, Mingyu Zhao, Cheng Yang, Chuan Shi, &ldquo;SATGL: an Open-source Graph Learning Toolkit for Boolean Satisfiability&rdquo;, International Symposium of Electronics Design Automation (<b>ISEDA</b>), Xi'an, China, May. 10-13, 2024.
+                  <a href="https://satgl.readthedocs.io/en/latest/"><i class="fa fa-file-text-o" style="font-size:18px"></i></a>
+                  <a href="https://github.com/BUPT-GAMMA/SATGL"><i class="fa fa-github" style="font-size:18px"></i></a>
+              </li>
+              <li>[C5] Zhongjian Zhang, Mengmei Zhang, Yue Yu, Cheng Yang, <b>Jiawei Liu</b>, Chuan Shi, &ldquo;Endowing Pre-trained Graph Models with Provable Fairness&rdquo;, ACM The Web Conference (<b>WWW</b>), Singapore, May 13–17, 2024.
+                  <a href="https://github.com/BUPT-GAMMA/GraphPAR"><i class="fa fa-github" style="font-size:18px"></i></a>
+              </li>
+              <li>[J5] Chuan Shi, Junze Chen, <b>Jiawei Liu</b>, Cheng Yang, &ldquo;Graph Foundation Model&rdquo;, Frontiers Of Computer Science (<b>FCS</b>), 2024.
+              </li>
+              <li>[J4] <b>Jiawei Liu</b>, Haihan Gao, Cheng Yang, Chuan Shi, Tianchi Yang, Hongtao Cheng, Qianlong Xie, Xingxing Wang, Dong Wang, &ldquo;Heterogeneous Spatio-temporal Graph Contrastive Learning for Point-of-Interest Recommendation&rdquo;, Tsinghua Science and Technology (<b>TST</b>), 2024.
+              </li>
+              <h4>2023 and before</h4>
+              <li>[C4] Bo Yan, Cheng Yang, Chuan Shi, <b>Jiawei Liu</b>, Xiaochen Wang, &ldquo;Abnormal Event Detection via Hypergraph Contrastive Learning&rdquo;, SIAM International Conference on Data Mining (<b>SDM</b>), Minneapolis-St. Paul Twin Cities, MN, USA, Apr. 27–29, 2023.
+                <a href="https://github.com/BUPT-GAMMA/AEHCL"><i class="fa fa-github" style="font-size:18px"></i></a>
+              </li>
+              <li>[C3] Cheng Yang, Yuxin Guo, Yao Xu, Chuan Shi, <b>Jiawei Liu</b>, Chunchen Wang, Xin Li, Ning Guo, Hongzhi Yin, &ldquo;Learning to Distill Graph Neural Networks&rdquo;, ACM International Conference on Web Search and Data Mining (<b>WSDM</b>), Singapore, Feb. 27–Mar. 03, 2023.
+                    <a href="https://github.com/BUPT-GAMMA/LTD"><i class="fa fa-github" style="font-size:18px"></i></a>
+              </li>
+              <li>[J3] <b>Jiawei Liu</b>, Haihan Gao, Chuan Shi, Hongtao Cheng, Qianlong Xie, &ldquo;Self-Supervised Spatio-Temporal Graph Learning for Point-of-Interest Recommendation&rdquo;, Applied Sciences, 2023.
+              </li>
+              <li>[J2] <b>Jiawei Liu</b>, Chuan Shi, Cheng Yang, Zhiyuan Lu, Philip S.Yu, &ldquo;A survey on heterogeneous information network based recommender systems: Concepts, methods, applications and resources&rdquo;, AI Open, 2022.
+              </li>
+              <li>[C2] Cheng Yang, <b>Jiawei Liu</b>, Chuan Shi, &ldquo;Extract the Knowledge of Graph Neural Networks and Go Beyond it: An Effective Knowledge Distillation Framework&rdquo;, International World Wide Web Conference (<b>WWW</b>), Ljubljana, Slovenia, Apr. 19–23, 2021.
+                  <a href="https://github.com/BUPT-GAMMA/CPF"><i class="fa fa-github" style="font-size:18px"></i></a>
+              </li>
+              <li>[J1] <b>Jiawei Liu</b>, Chuan Shi, Cheng Yang, Philip S.Yu, &ldquo;Heterogeneous information network based recommender systems: A survey&rdquo;, Journal of Information Security (In Chinese), 2021.
+              </li>
+              <li>[C1] Xiao Wang, Shaohua Fan, Kun Kuang, Chuan Shi, <b>Jiawei Liu</b>, Bai Wang, &ldquo;Decorrelated Clustering with Data Selection Bias&rdquo;, International Joint Conference on Artificial Intelligence (<b>IJCAI</b>)</i>, Yokohama, Japan, Jul. 11–17, 2020.
+                  <a href="https://github.com/BUPT-GAMMA/IJCAI2020-DCKM"><i class="fa fa-github" style="font-size:18px"></i></a>
+              </li>
+            <h3 id="book-chapters">Books / Book Chapters</h3>
+              <li>[B1] <b>Jiawei Liu</b>, &ldquo;Distilling Graph Neural Networks&rdquo;, In: Advances in Graph Neural Networks, Springer, 2022.
+              </li>      
+            </div>
+            <hr>
+
+            <div class="col">
+              <h2 id="education">Education</h2>
+              <li>Postdoctoral Fellow, the Department of Computer Science and Engineering, The Chinese University of Hong Kong, Sep 2025 - Present</li>
+              <li>Ph.D, Computer Science and Technology, Beijing University of Posts and Telecommunications, Sep 2020 - Jun 2025</li>
+              <!-- <li>Visiting Student, the Department of Computer Science and Engineering, The Chinese University of Hong Kong, Sep 2024 - Mar 2025</li> -->
+              <li>B.Eng, Computer Science and Technology (Experimental Class), Beijing University of Posts and Telecommunications, Sep 2016 - Jun 2020</li>
+            </div>
+            <hr>
+
+            <div class="col">
+              <h2 id="experiences">Experiences</h2>
+              <!-- <li>Research Intern, Shenzhen Research Institute, The Chinese University of Hong Kong, Jan 2025 - Present</li> -->
+              <li>Research Assistant, Electronic Design Automation Center, The Chinese University of Hong Kong, Sep 2024 - Mar 2025</li>
+              <li>Research Intern, Large Circuit Model Group, National Center of Technology Innovation for EDA, Jul 2024 - Sep 2024</li>
+              <li>Research Intern, Supply and Operation Algorithm Group, Meituan, Sep 2021 - Nov 2022</li>
+            </div>
+            
+            <hr>
+
+            <div class="col">
+
+        <!-- <h2 id="calendar">My Calendar</h2>
+        <iframe src="https://calendar.google.com/calendar/embed?src=cabin.ljw%40gmail.com&ctz=Asia%2FHong_Kong&showPrint=0&showTabs=0&showCalendars=0&showTz=1&showDate=1&showNav=1&mode=WEEK" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe> -->
+
+            <!-- <div class="col">
+              <h2 id="group">BUPT AI4EDA Group</h2>
+              The BUPT AI4EDA Group is co-founded by <a href="http://www.shichuan.org/">GAMMA Lab</a> and <a href="https://zhaokang-lab.github.io/">ZhaoKang Lab</a>.
+              <h3>Graduate Students</h3>
+              <table id="noborder">
+                <tr class="r1"><td class="c1">Hongtao Cheng&nbsp;</td><td class="c2">BS@BUPT &rarr; MS @BUPT</td></tr>
+                <tr class="r1"><td class="c1"><a href="https://scholar.google.com/citations?user=edQ-BM8AAAAJ">Feng Guo </a></td><td class="c2">BS@BJUT &rarr; MS @BUPT</td></tr>
+                <tr class="r1"><td class="c1"><a href="https://scholar.google.com/citations?user=7fa4_DwAAAAJ">Mingyu Zhao </a></td><td class="c2">BS@BUPT &rarr; MS @BUPT</td></tr>
+                <tr class="r1"><td class="c1">Xun He </td><td class="c2">BS@BUPT &rarr; MS @BUPT</td></tr>
+                <tr class="r1"><td class="c1">Zhiyan Liu </td><td class="c2">BS@BUPT &rarr; MS @BUPT</td></tr>
+              </table>
+              <h3>Visitors/Research Assistants (and some students working with me)</h3>
+              <table id="noborder">
+                <tr class="r1"><td class="c1">Shenglu Hua </td><td class="c2">BS@BUPT &rarr; PhD @Peking Univ</td></tr>
+              </table>
+
+              <h3>Selected Graduation Theses</h3>
+              <table id="noborder">
+                <tr class="r1"><td class="c1">2022-2023 </td><td class="c2">Hongtao Cheng </td><td class="c3"><font color=grey>&ldquo;<i>The Design and Implementation of SAT Solver Selection Algorithm based on Graph Neural Network</i>&rdquo;</font></td></tr>
+                <tr class="r1"><td class="c1">2023-2024 </td><td class="c2">Feng Guo </td><td class="c3"><font color=grey>&ldquo;<i>The Design and Implementation of Static IR Drop Prediction Algorithm for SoC Power Networks based on Machine Learning</i>&rdquo;</font></td></tr>
+                <tr class="r1"><td class="c1">2024-2025 </td><td class="c2">Mingyu Zhao </td><td class="c3"><font color=grey>&ldquo;<i>Design and Implementation of Performance Prediction Algorithm for Logic Synthesis based on Multimodal Learning</i>&rdquo;</font></td></tr>
+                <tr class="r1"><td class="c1">2024-2025 </td><td class="c2">Xun He </td><td class="c3"><font color=grey>&ldquo;<i>Design and Implementation of Large-scale Circuit Representation Learning Algorithm based on Graph Machine Learning</i>&rdquo;</font></td></tr>
+              </table>
+
+              <h3>Selected Projects</h3>
+              <table id="noborder">
+                <tr class="r1"><td class="c1">2024-2025 </td><td class="c2">Mingyu Zhao </td><td class="c3">Beijing Natural Science Foundation Undergraduate Program</td><td class="c4"><font color=grey>&ldquo;<i>Modeling and Analysis of Large-scale Integrated Circuit Structures based on Graph Neural Networks</i>&rdquo;</font></td></tr>
+                <tr class="r1"><td class="c1">2025-2026 </td><td class="c2">Shenglu Hua </td><td class="c3">Beijing Natural Science Foundation Undergraduate Program</td><td class="c4"><font color=grey>&ldquo;<i>AMS Circuit Representation Learning and Parasitic Parameter Extraction based on Graph Neural Networks</i>&rdquo;</font></td></tr>
+              </table>
+
+            </div> -->
+
+          
+
+        <!-- <i>"A hundred times every day I remind myself that my inner and outer life are based on the labors of other men, living and dead, and that I must exert myself in order to give in the same measure as I have received and am still receiving."</i> 
+                    <p style="text-align: right;"><br>- Albert Einstein.</li> -->
+
+    </div>
+    </div>
+    </div>
+  <!-- Begin Web-Stat code v 6.3 -->
+  <!-- <span id="wts1866123">&nbsp;</span><script>
+  var wts=document.createElement('script');wts.type='text/javascript';
+  wts.async=true;wts.src='https://wts.one/5/1866123/log6_2.js';
+  document.getElementById('wts1866123').appendChild(wts);
+  </script><noscript><a href="https://www.web-stat.com">
+  <img src="https://wts.one/6/5/1866123.gif"
+  alt="Web-Stat web tracker"></a></noscript> -->
+  <!-- End Web-Stat code v 6.3 -->
+
+<!--<div id="tcb-wrapper" style="z-index: 2147483647 !important; position: relative !important;"></div>-->
+<!-- people may like it too! &ndash;&gt;-->
+<!--    <a style="color:#b5bec9;font-size:0.8em; float:right;" href="https://github.com/mavroudisv/plain-academic">The template is by Vasilios Mavroudis. Thanks!</a>-->
+
+</body>
+
+</html>
