@@ -560,13 +560,13 @@
           <strong>MappingEvolve</strong>
           <div class="meta">2026 · Intra-stage · EDA-tool code</div>
           <p>LLM-driven evolution of technology-mapping tool code, with each edit accepted by a stage-local optimizer.</p>
-          <a href="https://github.com/leolau-lab/mappingevolve" rel="noopener" target="_blank">Code →</a>
+          <a href="https://github.com/algorithmicsuperintelligence/openevolve" rel="noopener" target="_blank">Code →</a>
         </div>
         <div class="ref-card">
           <strong>ChatEDA</strong>
           <div class="meta">2024 · Inter-stage · RTL→GDSII</div>
           <p>Autonomous orchestration from RTL to implemented layout, coordinating netlist synthesis, placement, and routing scripts.</p>
-          <a href="https://github.com/Thinklab-SJTU/awesome-MLLM-EDA" rel="noopener" target="_blank">Code →</a>
+          <a href="https://github.com/wuhy68/ChatEDA" rel="noopener" target="_blank">Code →</a>
         </div>
         <div class="ref-card">
           <strong>HLSPilot</strong>
@@ -582,7 +582,7 @@
           <strong>VerilogCoder</strong>
           <div class="meta">2025 · Extra-stage · NL→RTL</div>
           <p>Autonomous Verilog coding agents with graph-based planning and AST-based waveform tracing from natural-language specs.</p>
-          <a href="https://github.com/NVlabs/verilogcoder" rel="noopener" target="_blank">Code →</a>
+          <a href="https://github.com/SimpleHuracan/MixAgent" rel="noopener" target="_blank">Code →</a>
         </div>
         <div class="ref-card">
           <strong>AssertLLM</strong>
@@ -808,7 +808,7 @@
               tr.setAttribute('data-year', String(s.year || 0));
               tr.setAttribute('data-search', (s.name + ' ' + s.title + ' ' + s.venue + ' ' + s.family + ' ' + s.primary_input + ' ' + s.primary_output).toLowerCase());
 
-              let links = '<a href="' + scholarLink(s.title) + '" rel="noopener" target="_blank">Paper</a>';
+              let links = '<a href="' + esc(s.paper_url || scholarLink(s.title)) + '" rel="noopener" target="_blank">Paper</a>';
               if (s.github) {
                 links += ' · <a href="' + esc(s.github) + '" rel="noopener" target="_blank">Code</a>';
               }
