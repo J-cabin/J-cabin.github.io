@@ -4,12 +4,12 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Happy Beginner</title>
-<meta name="description" content="Happy Beginner — AI for Electronic Design Automation"/>
+<meta name="description" content="Happy Beginner — a little explorer wandering through the digital world"/>
 <style>
     :root {
-      --bg: #0a0a0b;
+      --bg: #0a0c12;
       --text: #e8e8e6;
-      --muted: #5c6470;
+      --muted: #7c8698;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; }
@@ -17,51 +17,37 @@
       background: var(--bg);
       color: var(--text);
       font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, "Courier New", monospace;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
+      overflow: hidden;
       -webkit-font-smoothing: antialiased;
     }
     nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 10;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 22px 32px;
+      padding: 18px 28px;
       font-size: 14px;
       letter-spacing: 0.02em;
+      background: linear-gradient(to bottom, rgba(10,12,18,.9), rgba(10,12,18,0));
+      pointer-events: none;
     }
     .nav-brand {
       color: var(--muted);
       font-size: 13px;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      text-decoration: none;
+      pointer-events: auto;
     }
-    .nav-links { display: flex; gap: 26px; }
+    .nav-links { display: flex; gap: 24px; pointer-events: auto; }
     .nav-links a {
       color: var(--muted);
       text-decoration: none;
       transition: color .2s ease;
     }
     .nav-links a:hover { color: var(--text); }
-    main {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 24px;
-    }
-    .title {
-      font-size: clamp(2.4rem, 8vw, 4.8rem);
-      font-weight: 400;
-      letter-spacing: 0.06em;
-      line-height: 1.15;
-      text-align: center;
-    }
-    @media (max-width: 640px) {
-      nav { flex-direction: column; gap: 14px; align-items: flex-start; }
-      .nav-links { flex-wrap: wrap; gap: 18px; }
-    }
+    canvas { position: fixed; inset: 0; display: block; }
 </style>
 </head>
 <body>
@@ -71,8 +57,293 @@
       <a href="/agenticeda/">AgenticEDA Survey</a>
     </div>
   </nav>
-  <main>
-    <div class="title">Happy Beginner</div>
-  </main>
+  <canvas id="world"></canvas>
+  <script>
+    (function () {
+      const canvas = document.getElementById('world');
+      const ctx = canvas.getContext('2d');
+      let W = 0, H = 0, dpr = 1;
+
+      function resize() {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        W = window.innerWidth;
+        H = window.innerHeight;
+        canvas.width = W * dpr;
+        canvas.height = H * dpr;
+        canvas.style.width = W + 'px';
+        canvas.style.height = H + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      // ---------- helpers ----------
+      function circle(x, y, r, fill) {
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fillStyle = fill;
+        ctx.fill();
+      }
+      function roundRect(x, y, w, h, r, fill) {
+        const rr = Math.min(r, w / 2, h / 2);
+        ctx.beginPath();
+        ctx.moveTo(x + rr, y);
+        ctx.arcTo(x + w, y, x + w, y + h, rr);
+        ctx.arcTo(x + w, y + h, x, y + h, rr);
+        ctx.arcTo(x, y + h, x, y, rr);
+        ctx.arcTo(x, y, x + w, y, rr);
+        ctx.closePath();
+        ctx.fillStyle = fill;
+        ctx.fill();
+      }
+      function limb(px, py, angle, len, color, width) {
+        const ex = px + Math.sin(angle) * len;
+        const ey = py + Math.cos(angle) * len;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = width;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(px, py);
+        ctx.lineTo(ex, ey);
+        ctx.stroke();
+        return { x: ex, y: ey };
+      }
+
+      // ---------- digital world particles ----------
+      const GLYPHS = ['0','1','01','10','0101','{ }','</>','&&','==','->','=>','#','λ','π','if','for','<3',':)','/*','*','+','=',':',';','~','!','<>'];
+      const COLORS = ['#22d3ee', '#2dd4bf', '#60a5fa', '#a78bfa'];
+      function rand(a, b) { return a + Math.random() * (b - a); }
+
+      function makeParticle(depth) {
+        return {
+          text: GLYPHS[(Math.random() * GLYPHS.length) | 0],
+          x: Math.random() * W,
+          y: rand(H * 0.08, H * 0.66),
+          size: depth * 11 + rand(2, 9),
+          speed: depth * 18 + rand(6, 26),
+          alpha: depth * 0.28 + rand(0.05, 0.18),
+          color: COLORS[(Math.random() * COLORS.length) | 0],
+        };
+      }
+      const layers = [
+        { depth: 0.35, arr: [] },
+        { depth: 0.7, arr: [] },
+        { depth: 1.15, arr: [] },
+      ];
+      function seedParticles() {
+        layers.forEach(l => {
+          const n = Math.round((l.depth === 1.15 ? 26 : 22));
+          l.arr = [];
+          for (let i = 0; i < n; i++) l.arr.push(makeParticle(l.depth));
+        });
+      }
+      seedParticles();
+
+      // circuit traces (background)
+      const traces = [];
+      for (let i = 0; i < 7; i++) {
+        traces.push({
+          y: rand(H * 0.1, H * 0.68),
+          x: Math.random() * W,
+          len: rand(120, 420),
+          speed: rand(6, 18),
+          dir: Math.random() < 0.5 ? 1 : -1,
+          color: COLORS[(Math.random() * COLORS.length) | 0],
+        });
+      }
+
+      // ---------- the little boy ----------
+      function drawBoy(phase, t) {
+        const groundY = H * 0.72;
+        const boyX = W * 0.40;
+        const scale = Math.max(0.75, Math.min(1.5, H / 640));
+
+        const bob = Math.abs(Math.sin(phase)) * 2.4 * scale;
+        const swing = 0.55;
+
+        // glow around the boy
+        const glow = ctx.createRadialGradient(boyX, groundY - 50 * scale, 10, boyX, groundY - 50 * scale, 150 * scale);
+        glow.addColorStop(0, 'rgba(251,191,36,0.14)');
+        glow.addColorStop(1, 'rgba(251,191,36,0)');
+        ctx.fillStyle = glow;
+        ctx.fillRect(boyX - 160 * scale, groundY - 200 * scale, 320 * scale, 240 * scale);
+
+        ctx.save();
+        ctx.translate(boyX, groundY - bob);
+        ctx.scale(scale, scale);
+
+        // shadow
+        ctx.beginPath();
+        ctx.ellipse(0, 3, 20, 5, 0, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(0,0,0,0.35)';
+        ctx.fill();
+
+        const hip = -36, shoulder = -64, headY = -80, headR = 15;
+        const legLen = 36, armLen = 22;
+
+        // --- backpack (behind torso) ---
+        roundRect(-13, shoulder + 4, 12, 26, 5, '#38bdf8');
+        roundRect(-15, shoulder + 6, 16, 20, 4, '#0ea5e9');
+
+        // --- legs ---
+        const legA1 = swing * Math.sin(phase);
+        const legA2 = swing * Math.sin(phase + Math.PI);
+        const fFar = limb(0, hip, legA1, legLen, '#24303f', 7.5);   // far leg (darker)
+        const fNear = limb(0, hip, legA2, legLen, '#334155', 7.5);  // near leg
+
+        // shoes
+        function shoe(f, dx) {
+          ctx.beginPath();
+          ctx.ellipse(f.x + dx, f.y + 1, 6, 3.2, 0, 0, Math.PI * 2);
+          ctx.fillStyle = '#f59e0b';
+          ctx.fill();
+        }
+        shoe(fFar, 2);
+        shoe(fNear, 2);
+
+        // --- torso ---
+        roundRect(-9, shoulder, 18, hip - shoulder + 2, 8, '#fbbf24');
+        // hoodie pocket / belt
+        roundRect(-7, shoulder + 8, 14, 4, 2, '#f59e0b');
+
+        // --- arms ---
+        const armA1 = -swing * 0.8 * Math.sin(phase + Math.PI);
+        const armA2 = -swing * 0.8 * Math.sin(phase);
+        const hFar = limb(0, shoulder + 4, armA2, armLen, '#eab308', 5.5);
+        const hNear = limb(0, shoulder + 4, armA1, armLen, '#fbbf24', 5.5);
+        circle(hFar.x, hFar.y, 3, '#fcd7b6');
+        circle(hNear.x, hNear.y, 3, '#fcd7b6');
+
+        // --- head ---
+        circle(0, headY, headR, '#fcd7b6');
+        // hair (cap on top-back)
+        ctx.beginPath();
+        ctx.arc(-1, headY - 1, headR + 1, Math.PI * 0.92, Math.PI * 1.86);
+        ctx.fillStyle = '#5b3a29';
+        ctx.fill();
+        // little hair fringe at front
+        ctx.beginPath();
+        ctx.arc(headR * 0.45, headY - headR * 0.72, 4.5, Math.PI * 0.6, Math.PI * 1.6);
+        ctx.fillStyle = '#5b3a29';
+        ctx.fill();
+        // eye (facing right)
+        circle(headR * 0.46, headY - 1.5, 2.1, '#1f2937');
+        // smile
+        ctx.beginPath();
+        ctx.arc(headR * 0.42, headY + 3.5, 4.2, 0.15 * Math.PI, 0.9 * Math.PI);
+        ctx.strokeStyle = '#c2703d';
+        ctx.lineWidth = 1.8;
+        ctx.lineCap = 'round';
+        ctx.stroke();
+        // blush
+        circle(headR * 0.28, headY + 4.5, 2.4, 'rgba(244,114,114,0.45)');
+
+        ctx.restore();
+      }
+
+      // ---------- background drawing ----------
+      function drawBackground(scroll) {
+        // sky gradient
+        const g = ctx.createLinearGradient(0, 0, 0, H);
+        g.addColorStop(0, '#0a0c12');
+        g.addColorStop(0.55, '#0d1120');
+        g.addColorStop(1, '#0f1526');
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, W, H);
+
+        // far grid dots
+        ctx.fillStyle = 'rgba(96,165,250,0.10)';
+        const gap = 46;
+        for (let gx = -gap; gx < W + gap; gx += gap) {
+          for (let gy = H * 0.06; gy < H * 0.66; gy += gap) {
+            const x = ((gx - scroll * 0.12) % (W + gap * 2) + (W + gap * 2)) % (W + gap * 2) - gap;
+            ctx.fillRect(x, gy, 1.6, 1.6);
+          }
+        }
+
+        // circuit traces
+        traces.forEach(tr => {
+          const x = tr.x - scroll * (tr.speed / 20) * tr.dir;
+          const xw = ((x % (W + 400)) + (W + 400)) % (W + 400) - 200;
+          ctx.strokeStyle = tr.color;
+          ctx.globalAlpha = 0.16;
+          ctx.lineWidth = 1.4;
+          ctx.beginPath();
+          ctx.moveTo(xw, tr.y);
+          ctx.lineTo(xw + tr.len, tr.y);
+          ctx.lineTo(xw + tr.len, tr.y + rand(-40, 40));
+          ctx.stroke();
+          ctx.globalAlpha = 1;
+          circle(xw + tr.len, tr.y + rand(-40, 40), 2.4, tr.color);
+        });
+      }
+
+      function drawParticles(scroll) {
+        layers.forEach(l => {
+          l.arr.forEach(p => {
+            const x = ((p.x - scroll * p.speed * 0.02) % (W + 80) + (W + 80)) % (W + 80) - 40;
+            ctx.globalAlpha = p.alpha;
+            ctx.fillStyle = p.color;
+            ctx.font = (p.size + 'px ui-monospace, Menlo, Consolas, monospace');
+            ctx.fillText(p.text, x, p.y);
+          });
+        });
+        ctx.globalAlpha = 1;
+      }
+
+      function drawGround(scroll) {
+        const groundY = H * 0.72;
+        // floor fill
+        const fg = ctx.createLinearGradient(0, groundY, 0, H);
+        fg.addColorStop(0, 'rgba(34,211,238,0.06)');
+        fg.addColorStop(1, 'rgba(34,211,238,0)');
+        ctx.fillStyle = fg;
+        ctx.fillRect(0, groundY, W, H - groundY);
+
+        // glowing path line
+        ctx.strokeStyle = 'rgba(96,165,250,0.55)';
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        ctx.moveTo(0, groundY);
+        ctx.lineTo(W, groundY);
+        ctx.stroke();
+        ctx.strokeStyle = 'rgba(96,165,250,0.15)';
+        ctx.lineWidth = 6;
+        ctx.beginPath();
+        ctx.moveTo(0, groundY + 3);
+        ctx.lineTo(W, groundY + 3);
+        ctx.stroke();
+
+        // scrolling binary on the road
+        ctx.font = '12px ui-monospace, Menlo, Consolas, monospace';
+        const spacing = 26;
+        const offset = (scroll * 2.2) % spacing;
+        for (let x = -spacing; x < W + spacing; x += spacing) {
+          const digit = ((x / spacing) | 0) % 2 === 0 ? '0' : '1';
+          ctx.fillStyle = 'rgba(96,165,250,0.28)';
+          ctx.fillText(digit, x - offset, groundY + 22);
+        }
+      }
+
+      // ---------- main loop ----------
+      let scroll = 0;
+      let last = performance.now();
+      function frame(now) {
+        const dt = Math.min(now - last, 50);
+        last = now;
+        scroll += dt * 0.03;
+        const phase = now / 260; // walk cycle
+
+        ctx.clearRect(0, 0, W, H);
+        drawBackground(scroll);
+        drawParticles(scroll);
+        drawGround(scroll);
+        drawBoy(phase, now);
+
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    })();
+  </script>
 </body>
 </html>
